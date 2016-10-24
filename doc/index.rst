@@ -40,7 +40,6 @@ Indices
 -------
 
 * :ref:`genindex`
-* :ref:`modindex`
 
 
 .. testsetup::
