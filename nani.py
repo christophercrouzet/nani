@@ -24,7 +24,7 @@ import types
 import numpy
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 _PY2 = sys.version_info[0] == 2
