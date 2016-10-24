@@ -22,12 +22,14 @@ provided to make the code more readable when setting the
 `Field.read_only` attribute without explicitely writing the ``read_only``
 keyword. Example:
 
-    >>> import nani
-    >>> data_type = nani.Structure(
-    ...     fields=(
-    ...         ('do_not_touch', nani.Number(), nani.READ_ONLY)
-    ...     )
-    ... )
+.. code-block:: python
+
+   >>> import nani
+   >>> data_type = nani.Structure(
+   ...     fields=(
+   ...         ('do_not_touch', nani.Number(), nani.READ_ONLY)
+   ...     )
+   ... )
 
 
 .. autoclass:: Field(name, type, read_only=False)

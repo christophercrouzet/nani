@@ -10,19 +10,23 @@ It offers an explicit syntax to construct NumPy's ``dtype``\s which tends to
 make the code more verbose to write but easier to read and to reason about,
 while being less error prone.
 
-    >>> import numpy
-    >>> import nani
-    >>> color_type = nani.Array(
-    ...     element_type=nani.Number(type=numpy.uint8, default=255),
-    ...     shape=3,
-    ...     view=None
-    ... )
+.. code-block:: python
+
+   >>> import numpy
+   >>> import nani
+   >>> color_type = nani.Array(
+   ...     element_type=nani.Number(type=numpy.uint8, default=255),
+   ...     shape=3,
+   ...     view=None
+   ... )
 
 
 This syntax also brings additional features such as **default values** and 
 **view types**. Default values facilitate the definition of new array elements
 while view types provide an abstraction layer built around NumPy's arrays,
 giving control over the public interface exposed to the end users.
+
+.. code-block:: python
 
    >>> dtype, default, view = nani.resolve(color_type, name='Color')
 

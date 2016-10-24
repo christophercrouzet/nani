@@ -25,20 +25,22 @@ As a result, creating a NumPy array through Nani requires an additional step:
 Flat Array of Integers
 ----------------------
 
-    >>> import numpy
-    >>> import nani
-    >>> data_type = nani.Number(type=numpy.int32)
-    >>> dtype, default, view = nani.resolve(data_type)
-    >>> a = numpy.arange(15, dtype=dtype)
-    >>> a
-    [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14]
-    >>> type(a)
-    <type 'numpy.ndarray'>
-    >>> v = view(a)
-    >>> v
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-    >>> type(v)
-    <class 'nani.ArrayView'>
+.. code-block:: python
+
+   >>> import numpy
+   >>> import nani
+   >>> data_type = nani.Number(type=numpy.int32)
+   >>> dtype, default, view = nani.resolve(data_type)
+   >>> a = numpy.arange(15, dtype=dtype)
+   >>> a
+   [ 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14]
+   >>> type(a)
+   <type 'numpy.ndarray'>
+   >>> v = view(a)
+   >>> v
+   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+   >>> type(v)
+   <class 'nani.ArrayView'>
 
 
 This example is the simplest usage possible, making it a good start to
@@ -63,25 +65,27 @@ has a length, it is iterable, and it can be queried for membership using the
 Array of Vector2-like Elements
 ------------------------------
 
-    >>> import numpy
-    >>> import nani
-    >>> vector2_type = nani.Array(
-    ...     element_type=nani.Number(),
-    ...     shape=2,
-    ...     name='Vector2'
-    ... )
-    >>> dtype, default, view = nani.resolve(vector2_type, name='Positions')
-    >>> a = numpy.zeros(3, dtype=dtype)
-    >>> v = view(a)
-    >>> for i, position in enumerate(v):
-    ...     position[0] = i + 1
-    ...     position[1] = i + 2
-    >>> v
-    [[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]]
-    >>> type(v)
-    <class 'nani.Positions'>
-    >>> type(v[0])
-    <class 'nani.Vector2'>
+.. code-block:: python
+
+   >>> import numpy
+   >>> import nani
+   >>> vector2_type = nani.Array(
+   ...     element_type=nani.Number(),
+   ...     shape=2,
+   ...     name='Vector2'
+   ... )
+   >>> dtype, default, view = nani.resolve(vector2_type, name='Positions')
+   >>> a = numpy.zeros(3, dtype=dtype)
+   >>> v = view(a)
+   >>> for i, position in enumerate(v):
+   ...     position[0] = i + 1
+   ...     position[1] = i + 2
+   >>> v
+   [[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]]
+   >>> type(v)
+   <class 'nani.Positions'>
+   >>> type(v[0])
+   <class 'nani.Vector2'>
 
 
 Vector2 structures are best represented in NumPy using a sub-array of size 2.
@@ -95,48 +99,50 @@ will also return yet another object with a similar interface.
 Vector2 Array With a Custom View
 --------------------------------
 
-    >>> import math
-    >>> import numpy
-    >>> import nani
-    >>> class Vector2(object):
-    ...     __slots__ = ('_data',)
-    ...     def __init__(self, data):
-    ...         self._data = data
-    ...     def __str__(self):
-    ...         return "({0}, {1})".format(self.x, self.y)
-    ...     @property
-    ...     def x(self):
-    ...         return self._data[0]
-    ...     @x.setter
-    ...     def x(self, value):
-    ...         self._data[0] = value
-    ...     @property
-    ...     def y(self):
-    ...         return self._data[1]
-    ...     @y.setter
-    ...     def y(self, value):
-    ...         self._data[1] = value
-    ...     def length(self):
-    ...         return math.sqrt(self.x ** 2 + self.y ** 2)
-    >>> vector2_type = nani.Array(
-    ...     element_type=nani.Number(),
-    ...     shape=2,
-    ...     view=Vector2
-    ... )
-    >>> dtype, default, view = nani.resolve(vector2_type, name='Positions')
-    >>> a = numpy.array([(1.0, 3.0), (2.0, 4.0)], dtype=dtype)
-    >>> v = view(a)
-    >>> for position in v:
-    ...     position.x *= 1.5
-    ...     position.y *= 2.5
-    ...     position.length()
-    7.64852927039
-    10.4403065089
-    >>> a
-    [[  1.5   7.5]
-    [  3.   10. ]]
-    >>>  v
-    [(1.5, 7.5), (3.0, 10.0)]
+.. code-block:: python
+
+   >>> import math
+   >>> import numpy
+   >>> import nani
+   >>> class Vector2(object):
+   ...     __slots__ = ('_data',)
+   ...     def __init__(self, data):
+   ...         self._data = data
+   ...     def __str__(self):
+   ...         return "({0}, {1})".format(self.x, self.y)
+   ...     @property
+   ...     def x(self):
+   ...         return self._data[0]
+   ...     @x.setter
+   ...     def x(self, value):
+   ...         self._data[0] = value
+   ...     @property
+   ...     def y(self):
+   ...         return self._data[1]
+   ...     @y.setter
+   ...     def y(self, value):
+   ...         self._data[1] = value
+   ...     def length(self):
+   ...         return math.sqrt(self.x ** 2 + self.y ** 2)
+   >>> vector2_type = nani.Array(
+   ...     element_type=nani.Number(),
+   ...     shape=2,
+   ...     view=Vector2
+   ... )
+   >>> dtype, default, view = nani.resolve(vector2_type, name='Positions')
+   >>> a = numpy.array([(1.0, 3.0), (2.0, 4.0)], dtype=dtype)
+   >>> v = view(a)
+   >>> for position in v:
+   ...     position.x *= 1.5
+   ...     position.y *= 2.5
+   ...     position.length()
+   7.64852927039
+   10.4403065089
+   >>> a
+   [[  1.5   7.5]
+   [  3.   10. ]]
+   >>>  v
+   [(1.5, 7.5), (3.0, 10.0)]
 
 
 This time a custom view for the Vector2 elements is provided. As per the
@@ -158,53 +164,55 @@ the vector.
 Particle Structure
 ------------------
 
-    >>> import numpy
-    >>> import nani
-    >>> class Vector2(object):
-    ...     __slots__ = ('_data',)
-    ...     def __init__(self, data):
-    ...         self._data = data
-    ...     def __str__(self):
-    ...         return "({0}, {1})".format(self.x, self.y)
-    ...     @property
-    ...     def x(self):
-    ...         return self._data[0]
-    ...     @x.setter
-    ...     def x(self, value):
-    ...         self._data[0] = value
-    ...     @property
-    ...     def y(self):
-    ...         return self._data[1]
-    ...     @y.setter
-    ...     def y(self, value):
-    ...         self._data[1] = value
-    >>> vector2_type = nani.Array(
-    ...     element_type=nani.Number(),
-    ...     shape=2,
-    ...     view=Vector2
-    ... )
-    >>> particle_type = nani.Structure(
-    ...     fields=(
-    ...         ('position', vector2_type),
-    ...         ('velocity', vector2_type),
-    ...         ('size', nani.Number(default=1.0)),
-    ...     ),
-    ...     name='Particle'
-    ... )
-    >>> dtype, default, view = nani.resolve(particle_type, name='Particles')
-    >>> a = numpy.array([default] * 2, dtype=dtype)
-    >>> v = view(a)
-    >>> for i, particle in enumerate(v):
-    ...     particle.position.x = (i + 2) * 3
-    ...     particle.velocity.y = (i + 2) * 4
-    ...     particle.size *= 2
-    ...     particle
-    Particle(position=(6.0, 0.0), velocity=(0.0, 8.0), size=2.0)
-    Particle(position=(9.0, 0.0), velocity=(0.0, 12.0), size=2.0)
-    >>> data = nani.get_data(v)
-    >>> data['position'] += data['velocity']
-    >>> data
-    [([6.0, 8.0], [0.0, 8.0], 1.0) ([9.0, 12.0], [0.0, 12.0], 2.0)]
+.. code-block:: python
+
+   >>> import numpy
+   >>> import nani
+   >>> class Vector2(object):
+   ...     __slots__ = ('_data',)
+   ...     def __init__(self, data):
+   ...         self._data = data
+   ...     def __str__(self):
+   ...         return "({0}, {1})".format(self.x, self.y)
+   ...     @property
+   ...     def x(self):
+   ...         return self._data[0]
+   ...     @x.setter
+   ...     def x(self, value):
+   ...         self._data[0] = value
+   ...     @property
+   ...     def y(self):
+   ...         return self._data[1]
+   ...     @y.setter
+   ...     def y(self, value):
+   ...         self._data[1] = value
+   >>> vector2_type = nani.Array(
+   ...     element_type=nani.Number(),
+   ...     shape=2,
+   ...     view=Vector2
+   ... )
+   >>> particle_type = nani.Structure(
+   ...     fields=(
+   ...         ('position', vector2_type),
+   ...         ('velocity', vector2_type),
+   ...         ('size', nani.Number(default=1.0)),
+   ...     ),
+   ...     name='Particle'
+   ... )
+   >>> dtype, default, view = nani.resolve(particle_type, name='Particles')
+   >>> a = numpy.array([default] * 2, dtype=dtype)
+   >>> v = view(a)
+   >>> for i, particle in enumerate(v):
+   ...     particle.position.x = (i + 2) * 3
+   ...     particle.velocity.y = (i + 2) * 4
+   ...     particle.size *= 2
+   ...     particle
+   Particle(position=(6.0, 0.0), velocity=(0.0, 8.0), size=2.0)
+   Particle(position=(9.0, 0.0), velocity=(0.0, 12.0), size=2.0)
+   >>> data = nani.get_data(v)
+   >>> data['position'] += data['velocity']
+   >>> data
+   [([6.0, 8.0], [0.0, 8.0], 1.0) ([9.0, 12.0], [0.0, 12.0], 2.0)]
 
 
 Building upon the previous example, a particle data type is defined in the form
@@ -232,80 +240,80 @@ this principle by default but also offer the possibility to add an extra layer
 between the user and the value. One use case could be to provide a more
 user-friendly interface to manipulate bit fields (or flags):
 
-    >>> import sys
-    >>> import numpy
-    >>> import nani
-    >>> if sys.version_info[0] == 2:
-    ...     def iteritems(d):
-    ...         return d.iteritems()
-    ... else:
-    ...     def iteritems(d):
-    ...         return iter(d.items())
-    >>> _PLAYER_STATE_ALIVE = 1 << 0
-    >>> _PLAYER_STATE_MOVING = 1 << 1
-    >>> _PLAYER_STATE_SHOOTING = 1 << 2
-    >>> _PLAYER_STATE_LABELS = {
-    ...     _PLAYER_STATE_ALIVE: 'alive',
-    ...     _PLAYER_STATE_MOVING: 'moving',
-    ...     _PLAYER_STATE_SHOOTING: 'shooting'
-    ... }
-    >>> class PlayerState(object):
-    ...     __slots__ = ('_data', '_index')
-    ...     def __init__(self, data, index):
-    ...         self._data = data
-    ...         self._index = index
-    ...     def __str__(self):
-    ...         value = self._data[self._index]
-    ...         return ('({0})'.format(', '.join([
-    ...             "'{0}'".format(name)
-    ...             for state, name in iteritems(_PLAYER_STATE_LABELS)
-    ...             if value & state
-    ...         ])))
-    ...     @property
-    ...     def alive(self):
-    ...         return self._data[self._index] & _PLAYER_STATE_ALIVE != 0
-    ...     @alive.setter
-    ...     def alive(self, value):
-    ...         self._data[self._index] |= _PLAYER_STATE_ALIVE
-    ...     @property
-    ...     def moving(self):
-    ...         return self._data[self._index] & _PLAYER_STATE_MOVING != 0
-    ...     @moving.setter
-    ...     def moving(self, value):
-    ...         self._data[self._index] |= _PLAYER_STATE_MOVING
-    ...     @property
-    ...     def shooting(self):
-    ...         return self._data[self._index] & _PLAYER_STATE_SHOOTING != 0
-    ...     @shooting.setter
-    ...     def shooting(self, value):
-    ...         self._data[self._index] |= _PLAYER_STATE_SHOOTING
-    >>> vector2_type = nani.Array(
-    ...     element_type=nani.Number(),
-    ...     shape=2
-    ... )
-    >>> player_type = nani.Structure(
-    ...     fields=(
-    ...         ('name', nani.String(length=32, default='unnamed')),
-    ...         ('position', vector2_type),
-    ...         ('state', nani.Number(
-    ...             type=numpy.uint8,
-    ...             default=_PLAYER_STATE_ALIVE,
-    ...             view=PlayerState)
-    ...         ),
-    ...     ),
-    ...     name='Player'
-    ... )
-    >>> dtype, default, view = nani.resolve(player_type, name='Players')
-    >>> a = numpy.array([default] * 2, dtype=dtype)
-    >>> v = view(a)
-    >>> first_player = v[0]
-    >>> first_player
-    Player(name=unnamed, position=[0.0, 0.0], state=('alive'))
-    >>> first_player.state.moving = True
-    >>> first_player.state
-    ('alive', 'moving')
-    >>> first_player.state.shooting
-    False
+   >>> import sys
+   >>> import numpy
+   >>> import nani
+   >>> if sys.version_info[0] == 2:
+   ...     def iteritems(d):
+   ...         return d.iteritems()
+   ... else:
+   ...     def iteritems(d):
+   ...         return iter(d.items())
+   >>> _PLAYER_STATE_ALIVE = 1 << 0
+   >>> _PLAYER_STATE_MOVING = 1 << 1
+   >>> _PLAYER_STATE_SHOOTING = 1 << 2
+   >>> _PLAYER_STATE_LABELS = {
+   ...     _PLAYER_STATE_ALIVE: 'alive',
+   ...     _PLAYER_STATE_MOVING: 'moving',
+   ...     _PLAYER_STATE_SHOOTING: 'shooting'
+   ... }
+   >>> class PlayerState(object):
+   ...     __slots__ = ('_data', '_index')
+   ...     def __init__(self, data, index):
+   ...         self._data = data
+   ...         self._index = index
+   ...     def __str__(self):
+   ...         value = self._data[self._index]
+   ...         return ('({0})'.format(', '.join([
+   ...             "'{0}'".format(name)
+   ...             for state, name in iteritems(_PLAYER_STATE_LABELS)
+   ...             if value & state
+   ...         ])))
+   ...     @property
+   ...     def alive(self):
+   ...         return self._data[self._index] & _PLAYER_STATE_ALIVE != 0
+   ...     @alive.setter
+   ...     def alive(self, value):
+   ...         self._data[self._index] |= _PLAYER_STATE_ALIVE
+   ...     @property
+   ...     def moving(self):
+   ...         return self._data[self._index] & _PLAYER_STATE_MOVING != 0
+   ...     @moving.setter
+   ...     def moving(self, value):
+   ...         self._data[self._index] |= _PLAYER_STATE_MOVING
+   ...     @property
+   ...     def shooting(self):
+   ...         return self._data[self._index] & _PLAYER_STATE_SHOOTING != 0
+   ...     @shooting.setter
+   ...     def shooting(self, value):
+   ...         self._data[self._index] |= _PLAYER_STATE_SHOOTING
+   >>> vector2_type = nani.Array(
+   ...     element_type=nani.Number(),
+   ...     shape=2
+   ... )
+   >>> player_type = nani.Structure(
+   ...     fields=(
+   ...         ('name', nani.String(length=32, default='unnamed')),
+   ...         ('position', vector2_type),
+   ...         ('state', nani.Number(
+   ...             type=numpy.uint8,
+   ...             default=_PLAYER_STATE_ALIVE,
+   ...             view=PlayerState)
+   ...         ),
+   ...     ),
+   ...     name='Player'
+   ... )
+   >>> dtype, default, view = nani.resolve(player_type, name='Players')
+   >>> a = numpy.array([default] * 2, dtype=dtype)
+   >>> v = view(a)
+   >>> first_player = v[0]
+   >>> first_player
+   Player(name=unnamed, position=[0.0, 0.0], state=('alive'))
+   >>> first_player.state.moving = True
+   >>> first_player.state
+   ('alive', 'moving')
+   >>> first_player.state.shooting
+   False
 
 
 The NumPy array created here is made of elements each representing a ``Player``

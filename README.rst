@@ -3,23 +3,25 @@ Nani
 
 An alternative approach to defining and viewing NumPy's arrays.
 
-    >>> import numpy
-    >>> import nani
-    >>> color_type = nani.Array(
-    ...     element_type=nani.Number(type=numpy.uint8, default=255),
-    ...     shape=3,
-    ...     view=None
-    ... )
-    >>> dtype, default, view = nani.resolve(color_type, name='Color')
-    >>> element_count = 2
-    >>> a = numpy.array([default] * element_count, dtype=dtype)
-    >>> v = view(a)
-    >>> type(v)
-    <class 'nani.Color'>
-    >>> for color in v:
-    ...     color
-    [255, 255, 255]
-    [255, 255, 255]
+.. code-block:: python
+
+   >>> import numpy
+   >>> import nani
+   >>> color_type = nani.Array(
+   ...     element_type=nani.Number(type=numpy.uint8, default=255),
+   ...     shape=3,
+   ...     view=None
+   ... )
+   >>> dtype, default, view = nani.resolve(color_type, name='Color')
+   >>> element_count = 2
+   >>> a = numpy.array([default] * element_count, dtype=dtype)
+   >>> v = view(a)
+   >>> type(v)
+   <class 'nani.Color'>
+   >>> for color in v:
+   ...     color
+   [255, 255, 255]
+   [255, 255, 255]
 
 
 See the ``overview`` and ``tutorial`` sections from the documentation for more
@@ -42,16 +44,16 @@ A suite of unit tests is available from the ``tests`` directory. You can run it
 by firing:
 
 .. code-block:: bash
-    
-    $ python tests/run.py
+
+   $ python tests/run.py
 
 
 To run specific tests, it is possible to pass names to match in the command
 line.
 
 .. code-block:: bash
-    
-    $ python tests/run.py TestCase test_my_code
+
+   $ python tests/run.py TestCase test_my_code
 
 
 This command will run all the tests within the ``TestCase`` class as well as
