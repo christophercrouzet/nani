@@ -1,10 +1,9 @@
+.. currentmodule:: nani
+
 .. _functions:
 
 Functions
 =========
-
-.. module:: nani
-   :noindex:
 
 .. autosummary::
    :nosignatures:

@@ -1,3 +1,5 @@
+.. currentmodule:: nani
+
 .. _overview:
 
 Overview

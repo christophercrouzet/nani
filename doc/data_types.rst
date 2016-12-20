@@ -1,11 +1,9 @@
+.. currentmodule:: nani
+
 .. _data_types:
 
 Data Types
 ==========
-
-.. module:: nani
-   :noindex:
-
 
 .. autosummary::
    :nosignatures:

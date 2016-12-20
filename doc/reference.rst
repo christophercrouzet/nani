@@ -1,9 +1,11 @@
+.. currentmodule:: nani
+
 .. _reference:
 
 Reference
 =========
 
-The whole content of the library is contained within the only module `nani`.
+The whole content of the library is contained within the only module ``nani``.
 This includes the types required to define a NumPy ``dtype``, the field helpers
 when dealing with structured arrays, the functions, and the final output
 structure :class:`~nani.Nani` returned from the main routine

@@ -1,10 +1,9 @@
+.. currentmodule:: nani
+
 .. _field_helpers:
 
 Field Helpers
 =============
-
-.. module:: nani
-   :noindex:
 
 .. autosummary::
    :nosignatures:

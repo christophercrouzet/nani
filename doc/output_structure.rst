@@ -1,10 +1,9 @@
+.. currentmodule:: nani
+
 .. _output_structure:
 
 Output Structure
 ================
-
-.. module:: nani
-   :noindex:
 
 .. autosummary::
    :nosignatures:
