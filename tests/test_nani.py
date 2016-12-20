@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+
+import os
+import sys
+_HERE = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(_HERE, os.pardir)))
+
+
 import sys
 import unittest
 
@@ -7,11 +15,11 @@ import numpy
 
 import nani
 
-from .data import flag
-from .data import numbers
-from .data import particle
-from .data import subtypes
-from .data import vector2
+from tests.data import flag
+from tests.data import numbers
+from tests.data import particle
+from tests.data import subtypes
+from tests.data import vector2
 
 
 _PY2 = sys.version_info[0] == 2
@@ -666,3 +674,7 @@ class MainTest(unittest.TestCase):
         self.assertFalse(a[0]['flags'] & flag.WHATEVER != 0)
         first |= flag.WHATEVER
         self.assertTrue(a[0]['flags'] & flag.WHATEVER != 0)
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
