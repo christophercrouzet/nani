@@ -148,7 +148,7 @@ class String(_String):
         ----------
         length : int
             Number of characters.
-        default : str on PY2 or bytes on PY3, optional
+        default : str on PY2 or bytes on PY3
             Default value.
         view : type or None
             If None, the owning array returns a direct reference to this
@@ -178,7 +178,7 @@ class Unicode(_Unicode):
         ----------
         length : int
             Number of characters.
-        default : unicode on PY2 or str on PY3, optional
+        default : unicode on PY2 or str on PY3
             Default value.
         view : type or None
             If None, the owning array returns a direct reference to this
@@ -580,14 +580,14 @@ def resolve(data_type, name=None, listify_default=False, check=True):
     ----------
     data_type : nani data type
         Type of the array elements.
-    name : str, optional
+    name : str
         Name for the view to be generated for the array.
-    listify_default : bool, optional
+    listify_default : bool
         True to output the default values with lists in place of tuples.
         This might cause the output to be incompatible with array creation
         routines such as ``numpy.array`` but it should still work for
         element assignment.
-    check : bool, optional
+    check : bool
         False to not check if ``data_type`` is well formed.
 
     Returns
@@ -966,7 +966,7 @@ def _resolve_default(data_type, listify=False):
     ----------
     data_type : nani data type
         Data type.
-    listify : bool, optional
+    listify : bool
         True to output lists in place of tuples. This might cause the output
         to be incompatible with ``numpy.array``.
 
