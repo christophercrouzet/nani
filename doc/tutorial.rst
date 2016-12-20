@@ -319,7 +319,7 @@ user-friendly interface to manipulate bit fields (or flags):
 
 
 The NumPy array created here is made of elements each representing a ``Player``
-from a game. The view class :class:`PlayerState` allows to manipulate the state
+from a game. The view class ``PlayerState`` allows to manipulate the state
 of the player (alive, moving, shooting) by abstracting the bitwise operations
 required to read/set the flags from/to the ``numpy.uint8`` data. As per the
 documentation of the data type :class:`Number`, the view class is
