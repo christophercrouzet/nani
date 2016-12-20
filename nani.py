@@ -304,7 +304,7 @@ class Field(_Field):
     __slots__ = ()
 
 
-#: Constant to use for the ``read_only`` attribute of a `~nani.Field`.
+#: Constant to use for the ``read_only`` attribute of a `Field`.
 #: To use for readability reasons when the ``read_only`` keyword is not
 #: explicitely written.
 READ_ONLY = True
@@ -554,7 +554,7 @@ _Nani = collections.namedtuple(
 
 class Nani(_Nani):
 
-    """Output structure from the function `~nani.resolve`.
+    """Output structure from the function `resolve`.
 
     Parameters
     ----------

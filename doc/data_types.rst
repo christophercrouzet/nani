@@ -23,7 +23,7 @@ These are the data types mimicking the `NumPy's scalar hierarchy of types`_ and
 allowing to describe `NumPy's dtypes`_ in the Nani format.
 
 They can later on be converted into NumPy's ``dtype``\s by calling the
-:func:`~nani.resolve` function.
+:func:`resolve` function.
 
 
 .. autoclass:: Bool(default=False, view=None)
@@ -37,12 +37,12 @@ They can later on be converted into NumPy's ``dtype``\s by calling the
 
 .. class:: Bytes(length, default='', view=None)
 
-   Alias for `~nani.String`.
+   Alias for `String`.
 
 
 .. class:: Str(length, default='', view=None)
 
-   Alias for `~nani.String` on PY2 or `~nani.Unicode` on PY3.
+   Alias for `String` on PY2 or `Unicode` on PY3.
 
 
 .. _NumPy's scalar hierarchy of types:

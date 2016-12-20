@@ -13,10 +13,10 @@ Field Helpers
 
 
 Structured arrays are described as a sequence of fields. Each field can be
-defined as a :class:`~nani.Field` or as a tuple compatible with the
-:class:`~nani.Field` structure.
+defined as a :class:`Field` or as a tuple compatible with the :class:`Field`
+structure.
 
-A constant :data:`~nani.READ_ONLY` equivalent to the boolean value ``True`` is
+A constant :data:`READ_ONLY` equivalent to the boolean value ``True`` is
 provided to make the code more readable when setting the
 `Field.read_only` attribute without explicitely writing the ``read_only``
 keyword. Example:
