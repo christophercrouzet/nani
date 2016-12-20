@@ -4,13 +4,15 @@ import re
 import setuptools
 
 
+# Taken from the `Python Packaging User Guide
+# <https://packaging.python.org/single_source_version/>`_
 def find_version(*file_paths):
     here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, *file_paths), 'r', 'latin1') as f:
+    with codecs.open(os.path.join(here, *file_paths), 'r', 'utf8') as f:
         version_file = f.read()
 
     version_match = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]',
-        version_file, re.M)
+                              version_file, re.M)
     if version_match:
         return version_match.group(1)
 
@@ -40,8 +42,8 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities'
     ],
+    install_requires=['numpy'],
     packages=[],
     py_modules=['nani'],
-    install_requires=['numpy'],
     include_package_data=True
 )
