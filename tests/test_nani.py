@@ -7,7 +7,6 @@ import numpy
 
 import nani
 
-from . import utils
 from .data import flag
 from .data import numbers
 from .data import particle
@@ -40,6 +39,17 @@ else:
     _BuiltinString = bytes
     _BuiltinUnicode = str
     _BUILTIN_MODULE = 'builtins'
+
+
+def _array_to_list(array):
+    if isinstance(array, numpy.ndarray):
+        return _array_to_list(array.tolist())
+    elif isinstance(array, list):
+        return [_array_to_list(item) for item in array]
+    elif isinstance(array, tuple):
+        return tuple(_array_to_list(item) for item in array)
+    else:
+        return array
 
 
 def _join_sequence(seq, last_separator):
@@ -423,7 +433,7 @@ class MainTest(unittest.TestCase):
 
         a = numpy.array(user_default, dtype=dtype)
         self.assertEqual(a.dtype, expected_dtype)
-        self.assertEqual(utils.array_to_list(a), user_default)
+        self.assertEqual(_array_to_list(a), user_default)
 
         # Custom view (the field 'id' is read-only).
         v = view(a)
@@ -444,7 +454,7 @@ class MainTest(unittest.TestCase):
         v[2].mass = 9.75
         v[3].neighbours.append('plenty')
 
-        self.assertEqual(utils.array_to_list(a), [
+        self.assertEqual(_array_to_list(a), [
             (0, [2.5, 3.5], 1.0, [0]),
             (1, [3.0, 4.0], 1.0, [1]),
             (2, [0, 0], 9.75, [2]),
@@ -487,14 +497,14 @@ class MainTest(unittest.TestCase):
 
         if _NUMPY_VERSION_1_10_1:
             v[0].position = (1.0, 2.0)
-            self.assertEqual(utils.array_to_list(a), [
+            self.assertEqual(_array_to_list(a), [
                 (0, [1.0, 2.0], 1.0, [0]),
                 (2, [12.0, 16.0], 1.0, [1]),
                 (4, [0, 0], 9.75, [4]),
                 (6, [0, 0], 1.0, [9])
             ])
         else:
-            self.assertEqual(utils.array_to_list(a), [
+            self.assertEqual(_array_to_list(a), [
                 (0, [10.0, 14.0], 1.0, [0]),
                 (2, [12.0, 16.0], 1.0, [1]),
                 (4, [0, 0], 9.75, [4]),
