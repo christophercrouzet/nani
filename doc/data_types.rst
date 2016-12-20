@@ -37,12 +37,12 @@ They can later on be converted into NumPy's ``dtype``\s by calling the
 
 .. class:: Bytes(length, default='', view=None)
 
-   Alias for `String`.
+   Alias for :class:`String`.
 
 
 .. class:: Str(length, default='', view=None)
 
-   Alias for `String` on PY2 or `Unicode` on PY3.
+   Alias for :class:`String` on PY2 or :class:`Unicode` on PY3.
 
 
 .. _NumPy's scalar hierarchy of types:

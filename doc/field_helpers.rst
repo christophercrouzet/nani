@@ -18,7 +18,7 @@ structure.
 
 A constant :data:`READ_ONLY` equivalent to the boolean value ``True`` is
 provided to make the code more readable when setting the
-`Field.read_only` attribute without explicitely writing the ``read_only``
+:attr:`Field.read_only` attribute without explicitely writing the ``read_only``
 keyword. Example:
 
 .. code-block:: python

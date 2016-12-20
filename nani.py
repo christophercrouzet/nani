@@ -304,7 +304,7 @@ class Field(_Field):
     __slots__ = ()
 
 
-#: Constant to use for the ``read_only`` attribute of a `Field`.
+#: Constant to use for the :attr:`Field.read_only` attribute's value.
 #: To use for readability reasons when the ``read_only`` keyword is not
 #: explicitely written.
 READ_ONLY = True
