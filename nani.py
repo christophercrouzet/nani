@@ -952,15 +952,7 @@ def _resolve_dtype(data_type):
 
 
 def _resolve_default(data_type, listify=False):
-    """Retrieve the view for a given data type.
-
-    Only one view class will be returned, that is the one representing the root
-    data type, but more class objects might be dynamically defined if the input
-    data type has nested elements, such as for the :class:`Array` and
-    :class:`Structure` types.
-
-    The default behaviour of dynamically and recursively creating a new view
-    class can be overriden by setting the ``view`` attribute of a data type.
+    """Retrieve the default value for a given data type.
 
     Parameters
     ----------
@@ -1010,7 +1002,15 @@ def _resolve_default(data_type, listify=False):
 
 
 def _resolve_view(data_type):
-    """Actual implementation of the ``resolve_view`` function.
+    """Retrieve the view for a given data type.
+
+    Only one view class will be returned, that is the one representing the root
+    data type, but more class objects might be dynamically defined if the input
+    data type has nested elements, such as for the :class:`Array` and
+    :class:`Structure` types.
+
+    The default behaviour of dynamically and recursively creating a new view
+    class can be overriden by setting the ``view`` attribute of a data type.
 
     Parameters
     ----------
