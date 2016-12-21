@@ -1084,7 +1084,7 @@ def _define_structure_view(data_type):
     object
         The new structure view.
     """
-    def _define_getter(field_index, field_type, field_view):
+    def define_getter(field_index, field_type, field_view):
         if field_view is None:
             def getter(self):
                 return self._data[field_index]
@@ -1097,7 +1097,7 @@ def _define_structure_view(data_type):
 
         return getter
 
-    def _define_setter(field_index, read_only):
+    def define_setter(field_index, read_only):
         def setter(self, value):
             self._data[field_index] = value
 
@@ -1111,8 +1111,8 @@ def _define_structure_view(data_type):
     })
     attributes.update({
         field.name: property(
-            fget=_define_getter(i, field.type, field_view),
-            fset=_define_setter(i, field.read_only),
+            fget=define_getter(i, field.type, field_view),
+            fset=define_setter(i, field.read_only),
             fdel=None
         )
         for i, (field, field_view)
