@@ -1,13 +1,15 @@
-# OS related.
 ._*
 .DS_Store
 
-# Python related.
 __pycache__/
-*.dist-info/
+build/
+dist/
+env/
+sdist/
+wheels/
 *.egg-info/
+*.egg
 *.lprof
 *.py[co]
 
-# Editor related.
 *.sublime-*
