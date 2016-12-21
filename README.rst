@@ -3,6 +3,17 @@ Nani
 
 An alternative approach to defining and viewing NumPy's arrays.
 
+
+Features
+--------
+
+* explicit and consistent syntax to define NumPy ``dtype``\s.
+* additional properties to generate default values and view types for arrays.
+
+
+Usage
+-----
+
 .. code-block:: python
 
    >>> import numpy
@@ -24,8 +35,7 @@ An alternative approach to defining and viewing NumPy's arrays.
    [255, 255, 255]
 
 
-See the ``overview`` and ``tutorial`` sections from the documentation for more
-information.
+See the ``tutorial`` section from the documentation for more examples.
 
 
 Documentation
