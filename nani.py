@@ -882,7 +882,7 @@ def _consolidate(data_type):
     """Enforce the structure of the data type.
 
     Specifically, ensure that if a field is defined as a generic tuple, then it
-    will be converted into an instance of ``nani.Field``.
+    will be converted into an instance of :class:`Field`.
 
     Parameters
     ----------
@@ -956,8 +956,8 @@ def _resolve_default(data_type, listify=False):
 
     Only one view class will be returned, that is the one representing the root
     data type, but more class objects might be dynamically defined if the input
-    data type has nested elements, such as for the ``nani.Array`` and
-    ``nani.Structure`` types.
+    data type has nested elements, such as for the :class:`Array` and
+    :class:`Structure` types.
 
     The default behaviour of dynamically and recursively creating a new view
     class can be overriden by setting the ``view`` attribute of a data type.
@@ -1037,7 +1037,7 @@ def _resolve_view(data_type):
 
 
 def _define_array_view(data_type):
-    """Define a new view object for a ``nani.Array`` type.
+    """Define a new view object for a :class:`Array` type.
 
     Parameters
     ----------
@@ -1072,7 +1072,7 @@ def _define_array_view(data_type):
 
 
 def _define_structure_view(data_type):
-    """Define a new view object for a ``nani.Structure`` type.
+    """Define a new view object for a :class:`Structure` type.
 
     Parameters
     ----------
