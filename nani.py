@@ -61,15 +61,15 @@ class Bool(_Bool):
 
     """Type corresponding to ``numpy.bool_``.
 
-        Attributes
-        ----------
-        default : bool
-            Default value.
-        view : type or None
-            If ``None``, the owning array returns a direct reference to this
-            boolean value, otherwise it is expected to be a class object
-            wrapping it and accepting 2 parameters: ``data``, the NumPy array
-            owning the boolean value, and ``index``, its position in the array.
+    Attributes
+    ----------
+    default : bool
+        Default value.
+    view : type or None
+        If ``None``, the owning array returns a direct reference to this
+        boolean value, otherwise it is expected to be a class object wrapping
+        it and accepting 2 parameters: ``data``, the NumPy array owning the
+        boolean value, and ``index``, its position in the array.
     """
 
     __slots__ = ()
@@ -88,15 +88,15 @@ class Object(_Object):
 
     """Type corresponding to ``numpy.object_``.
 
-        Attributes
-        ----------
-        default : object
-            Default value.
-        view : type or None
-            If ``None``, the owning array returns a direct reference to this
-            Python object, otherwise it is expected to be a class object
-            wrapping it and accepting 2 parameters: ``data``, the NumPy array
-            owning the Python object, and ``index``, its position in the array.
+    Attributes
+    ----------
+    default : object
+        Default value.
+    view : type or None
+        If ``None``, the owning array returns a direct reference to this Python
+        object, otherwise it is expected to be a class object wrapping it and
+        accepting 2 parameters: ``data``, the NumPy array owning the Python
+        object, and ``index``, its position in the array.
     """
 
     __slots__ = ()
@@ -116,15 +116,15 @@ class Number(_Number):
 
     """Type corresponding to ``numpy.number``.
 
-        Attributes
-        ----------
-        default : numpy.number type
-            Default value.
-        view : type or None
-            If ``None``, the owning array returns a direct reference to this
-            numeric value, otherwise it is expected to be a class object
-            wrapping it and accepting 2 parameters: ``data``, the NumPy array
-            owning the numeric value, and ``index``, its position in the array.
+    Attributes
+    ----------
+    default : numpy.number type
+        Default value.
+    view : type or None
+        If ``None``, the owning array returns a direct reference to this
+        numeric value, otherwise it is expected to be a class object wrapping
+        it and accepting 2 parameters: ``data``, the NumPy array owning the
+        numeric value, and ``index``, its position in the array.
     """
 
     __slots__ = ()
@@ -144,17 +144,17 @@ class String(_String):
 
     """Type corresponding to ``numpy.string_``.
 
-        Attributes
-        ----------
-        length : int
-            Number of characters.
-        default : str on PY2 or bytes on PY3
-            Default value.
-        view : type or None
-            If ``None``, the owning array returns a direct reference to this
-            string value, otherwise it is expected to be a class object
-            wrapping it and accepting 2 parameters: ``data``, the NumPy array
-            owning the string value, and ``index``, its position in the array.
+    Attributes
+    ----------
+    length : int
+        Number of characters.
+    default : str on PY2 or bytes on PY3
+        Default value.
+    view : type or None
+        If ``None``, the owning array returns a direct reference to this string
+        value, otherwise it is expected to be a class object wrapping it and
+        accepting 2 parameters: ``data``, the NumPy array owning the string
+        value, and ``index``, its position in the array.
     """
 
     __slots__ = ()
@@ -174,17 +174,17 @@ class Unicode(_Unicode):
 
     """Type corresponding to ``numpy.unicode_``.
 
-        Attributes
-        ----------
-        length : int
-            Number of characters.
-        default : unicode on PY2 or str on PY3
-            Default value.
-        view : type or None
-            If ``None``, the owning array returns a direct reference to this
-            unicode value, otherwise it is expected to be a class object
-            wrapping it and accepting 2 parameters: ``data``, the NumPy array
-            owning the unicode value, and ``index``, its position in the array.
+    Attributes
+    ----------
+    length : int
+        Number of characters.
+    default : unicode on PY2 or str on PY3
+        Default value.
+    view : type or None
+        If ``None``, the owning array returns a direct reference to this
+        unicode value, otherwise it is expected to be a class object wrapping
+        it and accepting 2 parameters: ``data``, the NumPy array owning the
+        unicode value, and ``index``, its position in the array.
     """
 
     __slots__ = ()
@@ -205,18 +205,18 @@ class Array(_Array):
 
     """Type corresponding to a NumPy array.
 
-        Attributes
-        ----------
-        element_type : nani type
-            Type of each element.
-        shape : int or tuple of int
-            Shape of the array. Passing an int defines a 1D array.
-        name : str or None
-            Name for the view type if `view` is ``None``.
-        view : type or None
-            If ``None``, a view for this array is dynamically generated by
-            Nani, otherwise it is expected to be a class object wrapping it and
-            accepting 1 parameter: ``data``, the corresponding NumPy array.
+    Attributes
+    ----------
+    element_type : nani type
+        Type of each element.
+    shape : int or tuple of int
+        Shape of the array. Passing an int defines a 1D array.
+    name : str or None
+        Name for the view type if `view` is ``None``.
+    view : type or None
+        If ``None``, a view for this array is dynamically generated by Nani,
+        otherwise it is expected to be a class object wrapping it and accepting
+        1 parameter: ``data``, the corresponding NumPy array.
     """
 
     __slots__ = ()
@@ -236,17 +236,17 @@ class Structure(_Structure):
 
     """Type corresponding to a NumPy structured array.
 
-        Attributes
-        ----------
-        fields : tuple of nani.Field or compatible tuple
-            Fields defining the structure.
-        name : str or None
-            Name for the view type if `view` is ``None``.
-        view : type or None
-            If ``None``, a view for this structured array is dynamically
-            generated by Nani, otherwise it is expected to be a class object
-            wrapping it and accepting 1 parameter: ``data``, the corresponding
-            NumPy structured array.
+    Attributes
+    ----------
+    fields : tuple of nani.Field or compatible tuple
+        Fields defining the structure.
+    name : str or None
+        Name for the view type if `view` is ``None``.
+    view : type or None
+        If ``None``, a view for this structured array is dynamically generated
+        by Nani, otherwise it is expected to be a class object wrapping it and
+        accepting 1 parameter: ``data``, the corresponding NumPy structured
+        array.
     """
 
     __slots__ = ()
