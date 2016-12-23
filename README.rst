@@ -38,6 +38,7 @@ Features
 
 * explicit and consistent syntax to define NumPy ``dtype``\s.
 * additional properties to generate default values and view types for arrays.
+* compatible with both Python 2 and Python 3.
 
 
 Usage
