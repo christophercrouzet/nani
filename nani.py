@@ -49,7 +49,7 @@ _SEQUENCE_TYPES = (list, tuple)
 
 
 _Bool = collections.namedtuple(
-    '_Bool', (
+    'Bool', (
         'default',
         'view',
     )
@@ -76,7 +76,7 @@ class Bool(_Bool):
 
 
 _Object = collections.namedtuple(
-    '_Object', (
+    'Object', (
         'default',
         'view',
     )
@@ -103,7 +103,7 @@ class Object(_Object):
 
 
 _Number = collections.namedtuple(
-    '_Number', (
+    'Number', (
         'type',
         'default',
         'view',
@@ -131,7 +131,7 @@ class Number(_Number):
 
 
 _String = collections.namedtuple(
-    '_String', (
+    'String', (
         'length',
         'default',
         'view',
@@ -161,7 +161,7 @@ class String(_String):
 
 
 _Unicode = collections.namedtuple(
-    '_Unicode', (
+    'Unicode', (
         'length',
         'default',
         'view',
@@ -191,7 +191,7 @@ class Unicode(_Unicode):
 
 
 _Array = collections.namedtuple(
-    '_Array', (
+    'Array', (
         'element_type',
         'shape',
         'name',
@@ -223,7 +223,7 @@ class Array(_Array):
 
 
 _Structure = collections.namedtuple(
-    '_Structure', (
+    'Structure', (
         'fields',
         'name',
         'view',
@@ -277,7 +277,7 @@ assert(all(hasattr(type_, 'type') or type_ in _PREDEFINED_ATOMIC_NUMPY_TYPES
 
 
 _Field = collections.namedtuple(
-    '_Field', (
+    'Field', (
         'name',
         'type',
         'read_only',
@@ -544,7 +544,7 @@ _MIXIN_ATTRIBUTES[_StructuredViewMixin] = (
 
 
 _Nani = collections.namedtuple(
-    '_Nani', (
+    'Nani', (
         'dtype',
         'default',
         'view',
