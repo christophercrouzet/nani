@@ -23,7 +23,7 @@ while being less error prone.
    ... )
 
 
-This syntax also brings additional features such as **default values** and 
+This syntax also brings additional features such as **default values** and
 **view types**. Default values facilitate the definition of new array elements
 while view types provide an abstraction layer built around NumPy's arrays,
 giving control over the public interface exposed to the end users.
