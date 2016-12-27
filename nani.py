@@ -737,6 +737,8 @@ def _check_data_type(data_type, parent_path):
     ------
     TypeError
         The data type isn't well-formed.
+    ValueError
+        Duplicate structure fields were found.
     """
     # The following checks are not to enforce some sort of type checking
     # in place of Python's duck typing but rather to give a chance to provide
