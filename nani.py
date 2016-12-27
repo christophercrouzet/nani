@@ -1203,7 +1203,7 @@ def _join_sequence(seq, last_separator=''):
     str
         The joined object string representations.
     """
-    def _format(item, count, index):
+    def format(item, count, index):
         return ("{0}'{1}'".format(last_separator, item)
                 if count > 1 and index == count - 1
                 else "'{0}'".format(item))
@@ -1212,7 +1212,7 @@ def _join_sequence(seq, last_separator=''):
         seq = (seq,)
 
     count = len(seq)
-    return ', '.join(_format(item, count, i) for i, item in enumerate(seq))
+    return ', '.join(format(item, count, i) for i, item in enumerate(seq))
 
 
 def _join_types(seq, last_separator=''):
