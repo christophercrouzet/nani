@@ -837,7 +837,7 @@ def _check_data_type(data_type, parent_path):
             if not isinstance(field.name, _STRING_TYPES):
                 raise TypeError(
                     "The first element of each field from the attribute "
-                    "'{0}.fields', that is the field name, is expected "
+                    "'{0}.fields', that is the 'name' attribute, is expected "
                     "to be an instance object of type {1}, not {2}."
                     .format(full_path, _join_types(_STRING_TYPES, "or "),
                             _join_types(type(field.name)))
@@ -846,7 +846,7 @@ def _check_data_type(data_type, parent_path):
             if not isinstance(field.type, _ALL):
                 raise TypeError(
                     "The second element of each field from the attribute "
-                    "'{0}.fields', that is the field type, is expected "
+                    "'{0}.fields', that is the 'type' attribute, is expected "
                     "to be an instance object of type {1}, not {2}."
                     .format(full_path, _join_types(_ALL, "or "),
                             _join_types(type(field.type)))

@@ -368,12 +368,12 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=((1, nani.Number()),), name='Moon'))
 
-        self.assertEqual(str(c.exception), "The first element of each field from the attribute 'Moon.fields', that is the field name, is expected to be an instance object of type {0}, not 'int'.".format(_join_types(_STRING_TYPES, "or ")))
+        self.assertEqual(str(c.exception), "The first element of each field from the attribute 'Moon.fields', that is the 'name' attribute, is expected to be an instance object of type {0}, not 'int'.".format(_join_types(_STRING_TYPES, "or ")))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=(('id', nani.Number),), name='Star'))
 
-        self.assertEqual(str(c.exception), "The second element of each field from the attribute 'Star.fields', that is the field type, is expected to be an instance object of type {0}, not 'type'.".format(_join_types(nani._ALL, "or ")))
+        self.assertEqual(str(c.exception), "The second element of each field from the attribute 'Star.fields', that is the 'type' attribute, is expected to be an instance object of type {0}, not 'type'.".format(_join_types(nani._ALL, "or ")))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=(('id', nani.Number(), 1.23),)))
