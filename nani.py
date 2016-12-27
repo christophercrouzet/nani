@@ -894,12 +894,6 @@ def _consolidate(data_type):
     nani data type
         The consolidated data type.
     """
-    def get_field_item(field, i):
-        if i < len(field):
-            return field[i]
-        else:
-            return Field.__new__.__defaults__[i - _FIELD_ATTR_COUNT]
-
     if isinstance(data_type, _ATOMIC):
         out = data_type
     elif isinstance(data_type, Array):
@@ -909,9 +903,8 @@ def _consolidate(data_type):
     elif isinstance(data_type, Structure):
         out = data_type._replace(
             fields=tuple(Field(
-                *(_consolidate(get_field_item(field, i))
-                  if i == _FIELD_TYPE else get_field_item(field, i)
-                  for i in range(_FIELD_ATTR_COUNT))
+                *(_consolidate(field[i]) if i == _FIELD_TYPE else field[i]
+                  for i in range(len(field)))
             ) for field in data_type.fields)
         )
 
