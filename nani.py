@@ -312,10 +312,10 @@ READ_ONLY = True
 
 _FIELD_NAME = Field._fields.index('name')
 _FIELD_TYPE = Field._fields.index('type')
-_FIELD_ATTRIBUTE_COUNT = len(Field._fields)
-_FIELD_EXPECTED_ARGUMENT_COUNTS = range(
-    _FIELD_ATTRIBUTE_COUNT - len(Field.__new__.__defaults__),
-    _FIELD_ATTRIBUTE_COUNT + 1
+_FIELD_ATTR_COUNT = len(Field._fields)
+_FIELD_REQUIRED_ARG_RANGE = range(
+    _FIELD_ATTR_COUNT - len(Field.__new__.__defaults__),
+    _FIELD_ATTR_COUNT + 1
 )
 
 
@@ -339,7 +339,7 @@ _FieldSubclassCheck = collections.namedtuple(
 _FieldSubclassCheck.__new__.__defaults__ = (False,)
 
 
-_TYPE_ATTRIBUTE_CHECKS = {
+_TYPE_ATTR_CHECKS = {
     Bool: (
         _FieldInstanceCheck(name='default', type=bool),
         _FieldSubclassCheck(name='view', type=object, allow_none=True),
@@ -775,7 +775,7 @@ def _check_data_type(data_type, parent_path):
     full_path = '{0}.{1}'.format(parent_path, name) if parent_path else name
 
     # Generic checks for each attribute.
-    for check in _TYPE_ATTRIBUTE_CHECKS[base]:
+    for check in _TYPE_ATTR_CHECKS[base]:
         attribute = getattr(data_type, check.name)
         if attribute is None:
             if check.allow_none:
@@ -826,7 +826,7 @@ def _check_data_type(data_type, parent_path):
                     .format(full_path, _join_types(type(field)))
                 )
 
-            if len(field) not in _FIELD_EXPECTED_ARGUMENT_COUNTS:
+            if len(field) not in _FIELD_REQUIRED_ARG_RANGE:
                 raise TypeError(
                     "Each field from the attribute '{0}.fields' is expected "
                     "to be a tuple compatible with {1} but got '{2}' instead."
@@ -898,7 +898,7 @@ def _consolidate(data_type):
         if i < len(field):
             return field[i]
         else:
-            return Field.__new__.__defaults__[i - _FIELD_ATTRIBUTE_COUNT]
+            return Field.__new__.__defaults__[i - _FIELD_ATTR_COUNT]
 
     if isinstance(data_type, _ATOMIC):
         out = data_type
@@ -911,7 +911,7 @@ def _consolidate(data_type):
             fields=tuple(Field(
                 *(_consolidate(get_field_item(field, i))
                   if i == _FIELD_TYPE else get_field_item(field, i)
-                  for i in range(_FIELD_ATTRIBUTE_COUNT))
+                  for i in range(_FIELD_ATTR_COUNT))
             ) for field in data_type.fields)
         )
 
