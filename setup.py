@@ -26,7 +26,7 @@ setuptools.setup(
     keywords='nani numpy dtype view wrap',
     license='MIT',
     url='https://github.com/christophercrouzet/nani',
-    author='Christopher Crouzet',
+    author="Christopher Crouzet",
     author_email='christopher.crouzet@gmail.com',
     classifiers=[
         'Development Status :: 4 - Beta',
