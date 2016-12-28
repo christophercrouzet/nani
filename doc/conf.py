@@ -2,47 +2,42 @@
 
 import os
 import sys
+sys.path.insert(0, os.path.abspath(os.pardir))
 
-src_path = os.path.abspath('..')
-if not src_path in sys.path:
-    sys.path.insert(0, src_path)
 
 import nani
 
-import sphinx
-
 
 # -- General configuration ------------------------------------------------
+
+needs_sphinx = '1.3'
 
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
-    'sphinx.ext.viewcode'
+    'sphinx.ext.napoleon',
+    'sphinx.ext.viewcode',
 ]
-
-if sphinx.version_info >= (1, 3):
-    extensions.append('sphinx.ext.napoleon')
-else:
-    extensions.append('sphinxcontrib.napoleon')
 
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'nani'
-copyright = u'2016, Christopher Crouzet'
+copyright = u"2016, Christopher Crouzet"
+author = u"Christopher Crouzet"
 version = nani.__version__
 release = version
-
-exclude_patterns = []
-default_role = 'autolink'
+language = None
 
 add_module_names = True
-show_authors = False
-
-pygments_style = 'sphinx'
 autodoc_member_order = 'bysource'
+default_role = 'autolink'
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+pygments_style = 'sphinx'
+show_authors = False
+todo_include_todos = False
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -53,9 +48,13 @@ if os.environ.get('READTHEDOCS', None) != 'True':
         html_theme = 'sphinx_rtd_theme'
         html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
     except ImportError:
-        pass
+        html_theme = 'alabaster'
 
 html_static_path = ['_static']
+
+
+# -- Options for HTMLHelp output ------------------------------------------
+
 htmlhelp_basename = 'nanidoc'
 
 
@@ -65,24 +64,23 @@ latex_elements = {
 }
 
 latex_documents = [
-    ('index', 'nani.tex', u'nani Documentation',
-     u'Christopher Crouzet', 'manual')
+    (master_doc, 'nani.tex', u"nani Documentation",
+     u"Christopher Crouzet", 'manual'),
 ]
 
 
 # -- Options for manual page output ---------------------------------------
 
 man_pages = [
-    ('index', 'nani', u'nani Documentation',
-     [u'Christopher Crouzet'], 1)
+    (master_doc, 'nani', u"nani Documentation",
+     [author], 1)
 ]
 
 
 # -- Options for Texinfo output -------------------------------------------
 
 texinfo_documents = [
-    ('index', 'nani', u'nani Documentation',
-     u'Christopher Crouzet', 'nani',
+    (master_doc, 'nani', u"nani Documentation", author, 'nani',
      "An alternative approach to defining and viewing NumPy's arrays.",
-     'Miscellaneous')
+     'Miscellaneous'),
 ]
