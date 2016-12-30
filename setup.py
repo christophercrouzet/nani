@@ -28,6 +28,7 @@ setuptools.setup(
     version=find_version('nani.py'),
     description="An alternative approach to defining and viewing NumPy's "
                 "arrays",
+    long_description=read('README.rst'),
     keywords='nani numpy dtype view wrap',
     license='MIT',
     url='https://github.com/christophercrouzet/nani',
