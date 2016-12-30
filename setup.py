@@ -26,8 +26,7 @@ def find_version(*file_paths):
 setuptools.setup(
     name='nani',
     version=find_version('nani.py'),
-    description="An alternative approach to defining and viewing NumPy's "
-                "arrays",
+    description="Alternative approach to defining and viewing NumPy's arrays",
     long_description=read('README.rst'),
     keywords='nani numpy dtype view wrap',
     license='MIT',

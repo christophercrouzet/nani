@@ -8,7 +8,7 @@
     nani
     ~~~~
 
-    An alternative approach to defining and viewing NumPy's arrays.
+    Alternative approach to defining and viewing NumPy's arrays.
 
     :copyright: Copyright 2016 by Christopher Crouzet.
     :license: MIT, see LICENSE for details.

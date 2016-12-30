@@ -81,6 +81,6 @@ man_pages = [
 
 texinfo_documents = [
     (master_doc, 'nani', u"nani Documentation", author, 'nani',
-     "An alternative approach to defining and viewing NumPy's arrays.",
+     "Alternative approach to defining and viewing NumPy's arrays.",
      'Miscellaneous'),
 ]
