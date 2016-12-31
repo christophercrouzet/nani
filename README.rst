@@ -1,6 +1,19 @@
 Nani
 ====
 
+.. image:: https://img.shields.io/pypi/v/nani.svg
+   :target: https://pypi.python.org/pypi/nani
+   :alt: PyPI latest version
+
+.. image:: https://readthedocs.org/projects/nani/badge/?version=latest
+   :target: https://nani.readthedocs.io
+   :alt: Documentation status
+
+.. image:: https://img.shields.io/pypi/l/nani.svg
+   :target: https://pypi.python.org/pypi/nani
+   :alt: License
+
+
 Nani is a library that provides an alternative approach to defining and viewing
 NumPy's arrays.
 
