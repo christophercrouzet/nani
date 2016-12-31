@@ -752,22 +752,22 @@ def _check_data_type(data_type, parent_path):
         if parent_path:
             raise TypeError(
                 "The data type for '{0}' is expected to be an instance "
-                "object but got the type {1} instead."
-                .format(parent_path, _join_types(data_type))
+                "object but got the type '{1}' instead."
+                .format(parent_path, _format_type(data_type))
             )
         else:
             raise TypeError(
                 "The data type is expected to be an instance object but got "
-                "the type {0} instead."
-                .format(_join_types(data_type))
+                "the type '{0}' instead."
+                .format(_format_type(data_type))
             )
 
     base = _find_base_type(data_type)
     if not base:
         raise TypeError(
-            "Objects of type {0} aren't supported as data types. Use any "
+            "Objects of type '{0}' aren't supported as data types. Use any "
             "type from {1} instead."
-            .format(_join_types(type(data_type)), _join_types(_ALL, "or "))
+            .format(_format_type(type(data_type)), _join_types(_ALL, "or "))
         )
 
     name = getattr(data_type, 'name', None)
@@ -804,14 +804,14 @@ def _check_data_type(data_type, parent_path):
         if not check_function(attribute, check.type):
             if isinstance(check, _FieldInstanceCheck):
                 glue = "an instance object of type"
-                type_name = _join_types(type(attribute))
+                type_name = _format_type(type(attribute))
             elif isinstance(check, _FieldSubclassCheck):
                 glue = "a subclass of"
-                type_name = _join_types(attribute)
+                type_name = _format_type(attribute)
 
             raise TypeError(
                 "The attribute '{0}.{1}' is expected to be {2} {3}, "
-                "not {4}."
+                "not '{4}'."
                 .format(full_path, check.name, glue,
                         _join_types(check.type, "or "), type_name)
             )
@@ -824,15 +824,16 @@ def _check_data_type(data_type, parent_path):
             if not isinstance(field, tuple):
                 raise TypeError(
                     "Each field from the attribute '{0}.fields' is expected "
-                    "to be a tuple but got {1} instead."
-                    .format(full_path, _join_types(type(field)))
+                    "to be a tuple but got '{1}' instead."
+                    .format(full_path, _format_type(type(field)))
                 )
 
             if len(field) not in _FIELD_REQUIRED_ARG_RANGE:
                 raise TypeError(
                     "Each field from the attribute '{0}.fields' is expected "
-                    "to be a tuple compatible with {1} but got '{2}' instead."
-                    .format(full_path, _join_types(Field), field)
+                    "to be a tuple compatible with '{1}' but got '{2}' "
+                    "instead."
+                    .format(full_path, _format_type(Field), field)
                 )
 
             field = Field(*field)
@@ -840,18 +841,18 @@ def _check_data_type(data_type, parent_path):
                 raise TypeError(
                     "The first element of each field from the attribute "
                     "'{0}.fields', that is the 'name' attribute, is expected "
-                    "to be an instance object of type {1}, not {2}."
+                    "to be an instance object of type {1}, not '{2}'."
                     .format(full_path, _join_types(_STRING_TYPES, "or "),
-                            _join_types(type(field.name)))
+                            _format_type(type(field.name)))
                 )
 
             if not isinstance(field.type, _ALL):
                 raise TypeError(
                     "The second element of each field from the attribute "
                     "'{0}.fields', that is the 'type' attribute, is expected "
-                    "to be an instance object of type {1}, not {2}."
+                    "to be an instance object of type {1}, not '{2}'."
                     .format(full_path, _join_types(_ALL, "or "),
-                            _join_types(type(field.type)))
+                            _format_type(type(field.type)))
                 )
 
             if not isinstance(field.read_only, bool):
@@ -859,8 +860,8 @@ def _check_data_type(data_type, parent_path):
                     "The third element of each field from the attribute "
                     "'{0}.fields', that is the 'read_only' attribute, is "
                     "expected to be an instance object of type 'bool', "
-                    "not {1}."
-                    .format(full_path, _join_types(type(field.read_only)))
+                    "not '{1}'."
+                    .format(full_path, _format_type(type(field.read_only)))
                 )
 
             field_path = '{0}.{1}'.format(full_path, field.name)
@@ -1182,6 +1183,25 @@ def _find_base_type(data_type):
     return None
 
 
+def _format_type(cls):
+    """Format a type name for printing.
+
+    Parameters
+    ----------
+    cls : type
+        Class object.
+
+    Returns
+    -------
+    str
+        The formatted class object name.
+    """
+    if cls.__module__ == _BUILTIN_MODULE:
+        return cls.__name__
+    else:
+        return '{0}.{1}'.format(cls.__module__, cls.__name__)
+
+
 def _join_sequence(seq, last_separator=''):
     """Join a sequence into a string.
 
@@ -1229,7 +1249,5 @@ def _join_types(seq, last_separator=''):
     if not isinstance(seq, _SEQUENCE_TYPES):
         seq = (seq,)
 
-    class_names = ['{0}.{1}'.format(cls.__module__, cls.__name__)
-                   if cls.__module__ != _BUILTIN_MODULE else cls.__name__
-                   for cls in seq]
+    class_names = [_format_type(cls) for cls in seq]
     return _join_sequence(class_names, last_separator)
