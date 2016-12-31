@@ -84,7 +84,7 @@ See the ``tutorial`` section from the documentation for more examples.
 Documentation
 -------------
 
-Read the documentation online at <http://nani.readthedocs.org> or check
+Read the documentation online at <http://nani.readthedocs.io> or check
 their source from the ``doc`` folder.
 
 The documentation can be built in different formats using Sphinx.
