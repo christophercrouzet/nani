@@ -1223,9 +1223,6 @@ def _join_sequence(seq, last_separator=''):
                 if count > 1 and index == count - 1
                 else "'{0}'".format(item))
 
-    if not isinstance(seq, _SEQUENCE_TYPES):
-        seq = (seq,)
-
     count = len(seq)
     return ', '.join(format(item, count, i) for i, item in enumerate(seq))
 
@@ -1246,8 +1243,5 @@ def _join_types(seq, last_separator=''):
     str
         The joined class object names.
     """
-    if not isinstance(seq, _SEQUENCE_TYPES):
-        seq = (seq,)
-
     class_names = [_format_type(cls) for cls in seq]
     return _join_sequence(class_names, last_separator)
