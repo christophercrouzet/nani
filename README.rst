@@ -1,6 +1,10 @@
 Nani
 ====
 
+.. image:: https://img.shields.io/travis/christophercrouzet/nani/master.svg
+   :alt: Build status
+   :target: https://travis-ci.org/christophercrouzet/nani
+
 .. image:: https://img.shields.io/pypi/v/nani.svg
    :target: https://pypi.python.org/pypi/nani
    :alt: PyPI latest version
