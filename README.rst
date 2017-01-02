@@ -2,8 +2,12 @@ Nani
 ====
 
 .. image:: https://img.shields.io/travis/christophercrouzet/nani/master.svg
-   :alt: Build status
    :target: https://travis-ci.org/christophercrouzet/nani
+   :alt: Build status
+
+.. image:: https://img.shields.io/coveralls/christophercrouzet/nani/master.svg
+   :target: https://coveralls.io/r/christophercrouzet/nani
+   :alt: Coverage Status
 
 .. image:: https://img.shields.io/pypi/v/nani.svg
    :target: https://pypi.python.org/pypi/nani
