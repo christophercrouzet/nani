@@ -47,6 +47,10 @@ setuptools.setup(
         'Topic :: Utilities'
     ],
     install_requires=['numpy'],
+    extras_require={
+        'dev': ['coverage', 'sphinx>=1.3', 'tox'],
+        'docs': ['sphinx>=1.3'],
+    },
     packages=[],
     py_modules=['nani'],
     include_package_data=True
