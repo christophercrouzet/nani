@@ -99,8 +99,8 @@ See the `Installation`_ section from the documentation.
 Documentation
 -------------
 
-Read the documentation online at <https://nani.readthedocs.io> or check its
-source in the ``doc`` directory.
+Read the documentation online at `nani.readthedocs.io`_ or check its source in
+the ``doc`` directory.
 
 
 Running the Tests
@@ -132,5 +132,6 @@ Christopher Crouzet
 <`christophercrouzet.com <https://christophercrouzet.com>`_>
 
 
+.. _nani.readthedocs.io: https://nani.readthedocs.io
 .. _Tutorial: https://nani.readthedocs.io/en/latest/tutorial.html
 .. _Installation: https://nani.readthedocs.io/en/latest/installation.html
