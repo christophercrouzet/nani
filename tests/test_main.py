@@ -62,9 +62,9 @@ def _array_to_list(array):
 
 def _join_sequence(seq, last_separator):
     def format(item, count, index):
-        return ("{0}'{1}'".format(last_separator, item)
+        return ("%s'%s'" % (last_separator, item)
                 if count > 1 and index == count - 1
-                else "'{0}'".format(item))
+                else "'%s'" % (item))
 
 
     if not isinstance(seq, (list, tuple)):
@@ -78,7 +78,7 @@ def _join_types(seq, last_separator):
     if not isinstance(seq, (list, tuple)):
         seq = (seq,)
 
-    class_names = ['{0}.{1}'.format(cls.__module__, cls.__name__)
+    class_names = ['%s.%s' % (cls.__module__, cls.__name__)
                    if cls.__module__ != _BUILTIN_MODULE else cls.__name__
                    for cls in seq]
     return _join_sequence(class_names, last_separator)
@@ -329,7 +329,7 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(123)
 
-        self.assertEqual(str(c.exception), "Objects of type 'int' aren't supported as data types. Use any type from {0} instead.".format(_join_types(nani._ALL, "or ")))
+        self.assertEqual(str(c.exception), "Objects of type 'int' aren't supported as data types. Use any type from %s instead." % (_join_types(nani._ALL, "or "),))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Number(type=None))
@@ -349,12 +349,12 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Array(element_type=123, shape=0))
 
-        self.assertEqual(str(c.exception), "The attribute 'Array.element_type' is expected to be an instance object of type {0}, not 'int'.".format(_join_types(nani._ALL, "or ")))
+        self.assertEqual(str(c.exception), "The attribute 'Array.element_type' is expected to be an instance object of type %s, not 'int'." % (_join_types(nani._ALL, "or "),))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Number(type=str))
 
-        self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a subclass of {0}, not 'str'.".format(_join_types(nani._NUMBER_TYPES, "or ")))
+        self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a subclass of %s, not 'str'." % (_join_types(nani._NUMBER_TYPES, "or "),))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=('abc', 123), name='Something'))
@@ -369,12 +369,12 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=((1, nani.Number()),), name='Moon'))
 
-        self.assertEqual(str(c.exception), "The first element of each field from the attribute 'Moon.fields', that is the 'name' attribute, is expected to be an instance object of type {0}, not 'int'.".format(_join_types(_STRING_TYPES, "or ")))
+        self.assertEqual(str(c.exception), "The first element of each field from the attribute 'Moon.fields', that is the 'name' attribute, is expected to be an instance object of type %s, not 'int'." % (_join_types(_STRING_TYPES, "or "),))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=(('id', nani.Number),), name='Star'))
 
-        self.assertEqual(str(c.exception), "The second element of each field from the attribute 'Star.fields', that is the 'type' attribute, is expected to be an instance object of type {0}, not 'type'.".format(_join_types(nani._ALL, "or ")))
+        self.assertEqual(str(c.exception), "The second element of each field from the attribute 'Star.fields', that is the 'type' attribute, is expected to be an instance object of type %s, not 'type'." % (_join_types(nani._ALL, "or "),))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=(('id', nani.Number(), 1.23),)))

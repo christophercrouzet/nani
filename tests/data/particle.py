@@ -20,8 +20,8 @@ class ParticleView(object):
 
     def __str__(self):
         return (
-            "Particle(id={0}, position={1}, mass={2}, neighbours={3})"
-            .format(self.id, self.position, self.mass, self.neighbours)
+            "Particle(id=%s, position=%s, mass=%s, neighbours=%s)"
+            % (self.id, self.position, self.mass, self.neighbours)
         )
 
     @property

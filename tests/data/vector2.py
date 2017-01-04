@@ -13,7 +13,7 @@ class Vector2View(object):
         self._data = data
 
     def __str__(self):
-        return "({0}, {1})".format(self.x, self.y)
+        return "(%s, %s)" % (self.x, self.y)
 
     @property
     def x(self):

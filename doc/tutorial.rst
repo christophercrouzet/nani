@@ -111,7 +111,7 @@ Vector2 Array With a Custom View
    ...     def __init__(self, data):
    ...         self._data = data
    ...     def __str__(self):
-   ...         return "({0}, {1})".format(self.x, self.y)
+   ...         return "(%s, %s)" % (self.x, self.y)
    ...     @property
    ...     def x(self):
    ...         return self._data[0]
@@ -175,7 +175,7 @@ Particle Structure
    ...     def __init__(self, data):
    ...         self._data = data
    ...     def __str__(self):
-   ...         return "({0}, {1})".format(self.x, self.y)
+   ...         return "(%s, %s)" % (self.x, self.y)
    ...     @property
    ...     def x(self):
    ...         return self._data[0]
@@ -266,8 +266,8 @@ user-friendly interface to manipulate bit fields (or flags):
    ...         self._index = index
    ...     def __str__(self):
    ...         value = self._data[self._index]
-   ...         return ('({0})'.format(', '.join([
-   ...             "'{0}'".format(name)
+   ...         return ('(%s)' % (', '.join([
+   ...             "'%s'" % (name,)
    ...             for state, name in iteritems(_PLAYER_STATE_LABELS)
    ...             if value & state
    ...         ])))

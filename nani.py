@@ -383,7 +383,7 @@ class _DirectArrayViewMixin(object):
         self._data = data
 
     def __str__(self):
-        return "[{0}]".format(', '.join(str(item) for item in self._data))
+        return "[%s]" % (', '.join(str(item) for item in self._data))
 
     def __getitem__(self, index):
         return self._data[index]
@@ -427,8 +427,8 @@ class _IndirectAtomicArrayViewMixin(object):
         self._data = data
 
     def __str__(self):
-        return "[{0}]".format(', '.join(str(self._element_view(self._data, i))
-                                        for i in _range(len(self._data))))
+        return "[%s]" % (', '.join(str(self._element_view(self._data, i))
+                                   for i in _range(len(self._data))))
 
     def __getitem__(self, index):
         return self._element_view(self._data, index)
@@ -477,8 +477,8 @@ class _IndirectCompositeArrayViewMixin(object):
         self._data = data
 
     def __str__(self):
-        return "[{0}]".format(', '.join(str(self._element_view(item))
-                                        for item in self._data))
+        return "[%s]" % (', '.join(str(self._element_view(item))
+                                   for item in self._data))
 
     def __getitem__(self, index):
         return self._element_view(self._data[index])
@@ -520,10 +520,9 @@ class _StructuredViewMixin(object):
         self._data = data
 
     def __str__(self):
-        fields_and_values = ("{0}={1}".format(field, getattr(self, field))
+        fields_and_values = ("%s=%s" % (field, getattr(self, field))
                              for field in self._fields)
-        return "{0}({1})".format(type(self).__name__,
-                                 ', '.join(fields_and_values))
+        return "%s(%s)" % (type(self).__name__, ', '.join(fields_and_values))
 
 
 _MIXIN_ATTRIBUTES[_StructuredViewMixin] = (
@@ -736,27 +735,26 @@ def _check_data_type(data_type, parent_path):
     if isinstance(data_type, _CLASS_TYPES):
         if parent_path:
             raise TypeError(
-                "The data type for '{0}' is expected to be an instance "
-                "object but got the type '{1}' instead."
-                .format(parent_path, _format_type(data_type)))
+                "The data type for '%s' is expected to be an instance "
+                "object but got the type '%s' instead."
+                % (parent_path, _format_type(data_type)))
         else:
             raise TypeError(
                 "The data type is expected to be an instance object but got "
-                "the type '{0}' instead."
-                .format(_format_type(data_type)))
+                "the type '%s' instead." % (_format_type(data_type),))
 
     base = _find_base_type(data_type)
     if not base:
         raise TypeError(
-            "Objects of type '{0}' aren't supported as data types. Use any "
-            "type from {1} instead."
-            .format(_format_type(type(data_type)), _join_types(_ALL, "or ")))
+            "Objects of type '%s' aren't supported as data types. Use any "
+            "type from %s instead."
+            % (_format_type(type(data_type)), _join_types(_ALL, "or ")))
 
     name = getattr(data_type, 'name', None)
     if not name:
         name = type(data_type).__name__
 
-    full_path = '{0}.{1}'.format(parent_path, name) if parent_path else name
+    full_path = '%s.%s' %(parent_path, name) if parent_path else name
 
     # Generic checks for each attribute.
     for check in _TYPE_ATTR_CHECKS[base]:
@@ -765,19 +763,17 @@ def _check_data_type(data_type, parent_path):
             if check.allow_none:
                 continue
             else:
-                raise TypeError(
-                    "The attribute '{0}.{1}' cannot be 'None'."
-                    .format(full_path, check.name))
+                raise TypeError("The attribute '%s.%s' cannot be 'None'."
+                                % (full_path, check.name))
 
         if isinstance(check, _FieldInstanceCheck):
             check_function = isinstance
         elif isinstance(check, _FieldSubclassCheck):
             if not isinstance(attribute, _CLASS_TYPES):
                 raise TypeError(
-                    "The attribute '{0}.{1}' is expected to be a class "
-                    "object{2}."
-                    .format(full_path, check.name,
-                            " or 'None'" if check.allow_none else ''))
+                    "The attribute '%s.%s' is expected to be a class "
+                    "object%s." % (full_path, check.name,
+                                   " or 'None'" if check.allow_none else ''))
 
             check_function = issubclass
 
@@ -790,10 +786,9 @@ def _check_data_type(data_type, parent_path):
                 type_name = _format_type(attribute)
 
             raise TypeError(
-                "The attribute '{0}.{1}' is expected to be {2} {3}, "
-                "not '{4}'."
-                .format(full_path, check.name, glue,
-                        _join_types(check.type, "or "), type_name))
+                "The attribute '%s.%s' is expected to be %s %s, "
+                "not '%s'." % (full_path, check.name, glue,
+                               _join_types(check.type, "or "), type_name))
 
     # Additional and/or recursive checks for specific attributes.
     if isinstance(data_type, Array):
@@ -802,55 +797,54 @@ def _check_data_type(data_type, parent_path):
         for field in data_type.fields:
             if not isinstance(field, tuple):
                 raise TypeError(
-                    "Each field from the attribute '{0}.fields' is expected "
-                    "to be a tuple but got '{1}' instead."
-                    .format(full_path, _format_type(type(field))))
+                    "Each field from the attribute '%s.fields' is expected "
+                    "to be a tuple but got '%s' instead."
+                    % (full_path, _format_type(type(field))))
 
             if len(field) not in _FIELD_REQUIRED_ARG_RANGE:
                 raise TypeError(
-                    "Each field from the attribute '{0}.fields' is expected "
-                    "to be a tuple compatible with '{1}' but got '{2}' "
-                    "instead."
-                    .format(full_path, _format_type(Field), field))
+                    "Each field from the attribute '%s.fields' is expected "
+                    "to be a tuple compatible with '%s' but got '%s' "
+                    "instead." % (full_path, _format_type(Field), field))
 
             field = Field(*field)
             if not isinstance(field.name, _STRING_TYPES):
                 raise TypeError(
                     "The first element of each field from the attribute "
-                    "'{0}.fields', that is the 'name' attribute, is expected "
-                    "to be an instance object of type {1}, not '{2}'."
-                    .format(full_path, _join_types(_STRING_TYPES, "or "),
-                            _format_type(type(field.name))))
+                    "'%s.fields', that is the 'name' attribute, is expected "
+                    "to be an instance object of type %s, not '%s'."
+                    % (full_path, _join_types(_STRING_TYPES, "or "),
+                       _format_type(type(field.name))))
 
             if not isinstance(field.type, _ALL):
                 raise TypeError(
                     "The second element of each field from the attribute "
-                    "'{0}.fields', that is the 'type' attribute, is expected "
-                    "to be an instance object of type {1}, not '{2}'."
-                    .format(full_path, _join_types(_ALL, "or "),
-                            _format_type(type(field.type))))
+                    "'%s.fields', that is the 'type' attribute, is expected "
+                    "to be an instance object of type %s, not '%s'."
+                    % (full_path, _join_types(_ALL, "or "),
+                       _format_type(type(field.type))))
 
             if not isinstance(field.read_only, bool):
                 raise TypeError(
                     "The third element of each field from the attribute "
-                    "'{0}.fields', that is the 'read_only' attribute, is "
+                    "'%s.fields', that is the 'read_only' attribute, is "
                     "expected to be an instance object of type 'bool', "
-                    "not '{1}'."
-                    .format(full_path, _format_type(type(field.read_only))))
+                    "not '%s'." % (full_path,
+                                   _format_type(type(field.read_only))))
 
-            field_path = '{0}.{1}'.format(full_path, field.name)
+            field_path = '%s.%s' % (full_path, field.name)
             _check_data_type(field.type, field_path)
 
         duplicates = find_duplicate_fields(data_type.fields)
         if duplicates:
             if len(duplicates) > 1:
                 raise ValueError(
-                    "The structure fields {0}, were provided multiple times."
-                    .format(_join_sequence(duplicates, "and ")))
+                    "The structure fields %s, were provided multiple times."
+                    % (_join_sequence(duplicates, "and ")),)
             else:
                 raise ValueError(
-                    "The structure field '{0}' was provided multiple times."
-                    .format(duplicates[0]))
+                    "The structure field '%s' was provided multiple times."
+                    % (duplicates[0]),)
 
 
 def _consolidate(data_type):
@@ -955,7 +949,7 @@ def _resolve_default(data_type, listify=False):
             field_defaults = collections.OrderedDict(
                 (field.name, _resolve_default(field.type, listify=listify))
                 for field in data_type.fields)
-            name = ('StructureDefault_{0}'.format(data_type.name)
+            name = ('StructureDefault_%s' % (data_type.name,)
                     if data_type.name else 'StructureDefault')
             struct = collections.namedtuple(name, field_defaults.keys())
             out = struct(**field_defaults)
@@ -1164,7 +1158,7 @@ def _format_type(cls):
     if cls.__module__ == _BUILTIN_MODULE:
         return cls.__name__
     else:
-        return '{0}.{1}'.format(cls.__module__, cls.__name__)
+        return '%s.%s' % (cls.__module__, cls.__name__)
 
 
 def _join_sequence(seq, last_separator=''):
@@ -1184,9 +1178,9 @@ def _join_sequence(seq, last_separator=''):
         The joined object string representations.
     """
     def format(item, count, index):
-        return ("{0}'{1}'".format(last_separator, item)
+        return ("%s'%s'" % (last_separator, item)
                 if count > 1 and index == count - 1
-                else "'{0}'".format(item))
+                else "'%s'" % (item,))
 
 
     count = len(seq)
