@@ -51,8 +51,7 @@ _Bool = collections.namedtuple(
     'Bool', (
         'default',
         'view',
-    )
-)
+    ))
 _Bool.__new__.__defaults__ = (False, None)
 
 
@@ -78,8 +77,7 @@ _Object = collections.namedtuple(
     'Object', (
         'default',
         'view',
-    )
-)
+    ))
 _Object.__new__.__defaults__ = (None, None)
 
 
@@ -106,8 +104,7 @@ _Number = collections.namedtuple(
         'type',
         'default',
         'view',
-    )
-)
+    ))
 _Number.__new__.__defaults__ = (numpy.float_, 0, None)
 
 
@@ -134,8 +131,7 @@ _String = collections.namedtuple(
         'length',
         'default',
         'view',
-    )
-)
+    ))
 _String.__new__.__defaults__ = (_BuiltinString(), None)
 
 
@@ -164,8 +160,7 @@ _Unicode = collections.namedtuple(
         'length',
         'default',
         'view',
-    )
-)
+    ))
 _Unicode.__new__.__defaults__ = (_BuiltinUnicode(), None)
 
 
@@ -195,8 +190,7 @@ _Array = collections.namedtuple(
         'shape',
         'name',
         'view',
-    )
-)
+    ))
 _Array.__new__.__defaults__ = (None, None)
 
 
@@ -226,8 +220,7 @@ _Structure = collections.namedtuple(
         'fields',
         'name',
         'view',
-    )
-)
+    ))
 _Structure.__new__.__defaults__ = (None, None)
 
 
@@ -280,8 +273,7 @@ _Field = collections.namedtuple(
         'name',
         'type',
         'read_only',
-    )
-)
+    ))
 _Field.__new__.__defaults__ = (False,)
 
 
@@ -314,8 +306,7 @@ _FIELD_TYPE = Field._fields.index('type')
 _FIELD_ATTR_COUNT = len(Field._fields)
 _FIELD_REQUIRED_ARG_RANGE = range(
     _FIELD_ATTR_COUNT - len(Field.__new__.__defaults__),
-    _FIELD_ATTR_COUNT + 1
-)
+    _FIELD_ATTR_COUNT + 1)
 
 
 _FieldInstanceCheck = collections.namedtuple(
@@ -323,8 +314,7 @@ _FieldInstanceCheck = collections.namedtuple(
         'name',
         'type',
         'allow_none',
-    )
-)
+    ))
 _FieldInstanceCheck.__new__.__defaults__ = (False,)
 
 
@@ -333,8 +323,7 @@ _FieldSubclassCheck = collections.namedtuple(
         'name',
         'type',
         'allow_none',
-    )
-)
+    ))
 _FieldSubclassCheck.__new__.__defaults__ = (False,)
 
 
@@ -527,10 +516,8 @@ class _StructuredViewMixin(object):
         self._data = data
 
     def __str__(self):
-        fields_and_values = (
-            "{0}={1}".format(field, getattr(self, field))
-            for field in self._fields
-        )
+        fields_and_values = ("{0}={1}".format(field, getattr(self, field))
+                             for field in self._fields)
         return "{0}({1})".format(type(self).__name__,
                                  ', '.join(fields_and_values))
 
@@ -547,8 +534,7 @@ _Nani = collections.namedtuple(
         'dtype',
         'default',
         'view',
-    )
-)
+    ))
 
 
 class Nani(_Nani):
@@ -603,8 +589,7 @@ def resolve(data_type, name=None, listify_default=False, check=True):
     >>> color_type = nani.Array(
     ...     element_type=nani.Number(type=numpy.uint8, default=255),
     ...     shape=3,
-    ...     view=None
-    ... )
+    ...     view=None)
     >>> dtype, default, view = nani.resolve(color_type, name='Color')
     >>> a = numpy.array([default] * element_count, dtype=dtype)
     >>> v = view(a)
@@ -622,8 +607,7 @@ def resolve(data_type, name=None, listify_default=False, check=True):
     return Nani(
         dtype=numpy.dtype(_resolve_dtype(data_type)),
         default=_resolve_default(data_type, listify=listify_default),
-        view=_resolve_view(Array(element_type=data_type, shape=-1, name=name))
-    )
+        view=_resolve_view(Array(element_type=data_type, shape=-1, name=name)))
 
 
 def update(data_type, **kwargs):
@@ -651,13 +635,11 @@ def update(data_type, **kwargs):
     >>> import nani
     >>> data_type = nani.Array(
     ...     element_type=nani.Number(),
-    ...     shape=2
-    ... )
+    ...     shape=2)
     >>> new_data_type = nani.update(
     ...     data_type,
     ...     element_type=nani.update(data_type.element_type, default=123),
-    ...     shape=3
-    ... )
+    ...     shape=3)
     """
     return data_type._replace(**kwargs)
 
@@ -709,8 +691,7 @@ def get_element_view(view):
     >>> vector2_type = nani.Array(
     ...     element_type=nani.Number(),
     ...     shape=2,
-    ...     name='Vector2'
-    ... )
+    ...     name='Vector2')
     >>> dtype, default, view = nani.resolve(vector2_type, name='Positions')
     >>> a = numpy.zeros(3, dtype=dtype)
     >>> v = view(a)
@@ -739,35 +720,33 @@ def _check_data_type(data_type, parent_path):
     ValueError
         Duplicate structure fields were found.
     """
-    # The following checks are not to enforce some sort of type checking
-    # in place of Python's duck typing but rather to give a chance to provide
-    # more meaningful error messages to the user.
-
     def find_duplicate_fields(fields):
         field_names = [field[_FIELD_NAME] for field in fields]
         return [item for item in field_names if field_names.count(item) > 1]
+
+
+    # The following checks are not to enforce some sort of type checking
+    # in place of Python's duck typing but rather to give a chance to provide
+    # more meaningful error messages to the user.
 
     if isinstance(data_type, _CLASS_TYPES):
         if parent_path:
             raise TypeError(
                 "The data type for '{0}' is expected to be an instance "
                 "object but got the type '{1}' instead."
-                .format(parent_path, _format_type(data_type))
-            )
+                .format(parent_path, _format_type(data_type)))
         else:
             raise TypeError(
                 "The data type is expected to be an instance object but got "
                 "the type '{0}' instead."
-                .format(_format_type(data_type))
-            )
+                .format(_format_type(data_type)))
 
     base = _find_base_type(data_type)
     if not base:
         raise TypeError(
             "Objects of type '{0}' aren't supported as data types. Use any "
             "type from {1} instead."
-            .format(_format_type(type(data_type)), _join_types(_ALL, "or "))
-        )
+            .format(_format_type(type(data_type)), _join_types(_ALL, "or ")))
 
     name = getattr(data_type, 'name', None)
     if not name:
@@ -784,8 +763,7 @@ def _check_data_type(data_type, parent_path):
             else:
                 raise TypeError(
                     "The attribute '{0}.{1}' cannot be 'None'."
-                    .format(full_path, check.name)
-                )
+                    .format(full_path, check.name))
 
         if isinstance(check, _FieldInstanceCheck):
             check_function = isinstance
@@ -795,8 +773,7 @@ def _check_data_type(data_type, parent_path):
                     "The attribute '{0}.{1}' is expected to be a class "
                     "object{2}."
                     .format(full_path, check.name,
-                            " or 'None'" if check.allow_none else '')
-                )
+                            " or 'None'" if check.allow_none else ''))
 
             check_function = issubclass
 
@@ -812,8 +789,7 @@ def _check_data_type(data_type, parent_path):
                 "The attribute '{0}.{1}' is expected to be {2} {3}, "
                 "not '{4}'."
                 .format(full_path, check.name, glue,
-                        _join_types(check.type, "or "), type_name)
-            )
+                        _join_types(check.type, "or "), type_name))
 
     # Additional and/or recursive checks for specific attributes.
     if isinstance(data_type, Array):
@@ -824,16 +800,14 @@ def _check_data_type(data_type, parent_path):
                 raise TypeError(
                     "Each field from the attribute '{0}.fields' is expected "
                     "to be a tuple but got '{1}' instead."
-                    .format(full_path, _format_type(type(field)))
-                )
+                    .format(full_path, _format_type(type(field))))
 
             if len(field) not in _FIELD_REQUIRED_ARG_RANGE:
                 raise TypeError(
                     "Each field from the attribute '{0}.fields' is expected "
                     "to be a tuple compatible with '{1}' but got '{2}' "
                     "instead."
-                    .format(full_path, _format_type(Field), field)
-                )
+                    .format(full_path, _format_type(Field), field))
 
             field = Field(*field)
             if not isinstance(field.name, _STRING_TYPES):
@@ -842,8 +816,7 @@ def _check_data_type(data_type, parent_path):
                     "'{0}.fields', that is the 'name' attribute, is expected "
                     "to be an instance object of type {1}, not '{2}'."
                     .format(full_path, _join_types(_STRING_TYPES, "or "),
-                            _format_type(type(field.name)))
-                )
+                            _format_type(type(field.name))))
 
             if not isinstance(field.type, _ALL):
                 raise TypeError(
@@ -851,8 +824,7 @@ def _check_data_type(data_type, parent_path):
                     "'{0}.fields', that is the 'type' attribute, is expected "
                     "to be an instance object of type {1}, not '{2}'."
                     .format(full_path, _join_types(_ALL, "or "),
-                            _format_type(type(field.type)))
-                )
+                            _format_type(type(field.type))))
 
             if not isinstance(field.read_only, bool):
                 raise TypeError(
@@ -860,8 +832,7 @@ def _check_data_type(data_type, parent_path):
                     "'{0}.fields', that is the 'read_only' attribute, is "
                     "expected to be an instance object of type 'bool', "
                     "not '{1}'."
-                    .format(full_path, _format_type(type(field.read_only)))
-                )
+                    .format(full_path, _format_type(type(field.read_only))))
 
             field_path = '{0}.{1}'.format(full_path, field.name)
             _check_data_type(field.type, field_path)
@@ -871,13 +842,11 @@ def _check_data_type(data_type, parent_path):
             if len(duplicates) > 1:
                 raise ValueError(
                     "The structure fields {0}, were provided multiple times."
-                    .format(_join_sequence(duplicates, "and "))
-                )
+                    .format(_join_sequence(duplicates, "and ")))
             else:
                 raise ValueError(
                     "The structure field '{0}' was provided multiple times."
-                    .format(duplicates[0])
-                )
+                    .format(duplicates[0]))
 
 
 def _consolidate(data_type):
@@ -899,16 +868,14 @@ def _consolidate(data_type):
     if isinstance(data_type, _ATOMIC):
         out = data_type
     elif isinstance(data_type, Array):
-        out = data_type._replace(
-            element_type=_consolidate(data_type.element_type)
-        )
+        element_type = _consolidate(data_type.element_type)
+        out = data_type._replace(element_type=element_type)
     elif isinstance(data_type, Structure):
-        out = data_type._replace(
-            fields=tuple(Field(
-                *(_consolidate(field[i]) if i == _FIELD_TYPE else field[i]
-                  for i in range(len(field)))
-            ) for field in data_type.fields)
-        )
+        fields = tuple(
+            Field(*(_consolidate(field[i]) if i == _FIELD_TYPE else field[i]
+                  for i in range(len(field))))
+            for field in data_type.fields)
+        out = data_type._replace(fields=fields)
 
     return out
 
@@ -983,8 +950,7 @@ def _resolve_default(data_type, listify=False):
         else:
             field_defaults = collections.OrderedDict(
                 (field.name, _resolve_default(field.type, listify=listify))
-                for field in data_type.fields
-            )
+                for field in data_type.fields)
             name = ('StructureDefault_{0}'.format(data_type.name)
                     if data_type.name else 'StructureDefault')
             struct = collections.namedtuple(name, field_defaults.keys())
@@ -1050,13 +1016,13 @@ def _define_array_view(data_type):
         mixins = (_IndirectAtomicArrayViewMixin,)
         attributes = _get_mixin_attributes(mixins)
         attributes.update({
-            '_element_view': element_view
+            '_element_view': element_view,
         })
     else:
         mixins = (_IndirectCompositeArrayViewMixin,)
         attributes = _get_mixin_attributes(mixins)
         attributes.update({
-            '_element_view': element_view
+            '_element_view': element_view,
         })
 
     name = data_type.name if data_type.name else 'ArrayView'
@@ -1095,21 +1061,20 @@ def _define_structure_view(data_type):
 
         return None if read_only else setter
 
+
     field_views = [_resolve_view(field.type) for field in data_type.fields]
     mixins = (_StructuredViewMixin,)
     attributes = _get_mixin_attributes(mixins)
     attributes.update({
-        '_fields': tuple(field.name for field in data_type.fields)
+        '_fields': tuple(field.name for field in data_type.fields),
     })
     attributes.update({
         field.name: property(
             fget=define_getter(i, field.type, field_view),
             fset=define_setter(i, field.read_only),
-            fdel=None
-        )
+            fdel=None)
         for i, (field, field_view)
-        in enumerate(zip(data_type.fields, field_views))
-    })
+        in enumerate(zip(data_type.fields, field_views))})
     name = data_type.name if data_type.name else 'StructureView'
     return type(name, (), attributes)
 
@@ -1218,6 +1183,7 @@ def _join_sequence(seq, last_separator=''):
         return ("{0}'{1}'".format(last_separator, item)
                 if count > 1 and index == count - 1
                 else "'{0}'".format(item))
+
 
     count = len(seq)
     return ', '.join(format(item, count, i) for i, item in enumerate(seq))

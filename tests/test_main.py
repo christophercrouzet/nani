@@ -66,6 +66,7 @@ def _join_sequence(seq, last_separator):
                 if count > 1 and index == count - 1
                 else "'{0}'".format(item))
 
+
     if not isinstance(seq, (list, tuple)):
         seq = (seq,)
 
