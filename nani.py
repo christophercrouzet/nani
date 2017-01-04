@@ -16,7 +16,6 @@
 
 import collections
 import copy
-import functools
 import numbers
 import sys
 import types
@@ -974,12 +973,9 @@ def _resolve_default(data_type, listify=False):
         Sequence = list if listify else tuple
         shape = ((data_type.shape,) if isinstance(data_type.shape, int)
                  else data_type.shape)
-        out = functools.reduce(
-            lambda default, length: Sequence(copy.deepcopy(default)
-                                             for _ in range(length)),
-            shape,
-            element_default
-        )
+        out = element_default
+        for dimension in shape:
+            out = Sequence(copy.deepcopy(out) for _ in range(dimension))
     elif isinstance(data_type, Structure):
         if listify:
             out = [_resolve_default(field.type, listify=listify)
