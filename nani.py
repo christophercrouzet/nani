@@ -35,12 +35,16 @@ if _PY2:
     _BuiltinString = str
     _BuiltinUnicode = unicode
     _BUILTIN_MODULE = '__builtin__'
+
+    _range = xrange
 else:
     _CLASS_TYPES = (type,)
     _STRING_TYPES = (str,)
     _BuiltinString = bytes
     _BuiltinUnicode = str
     _BUILTIN_MODULE = 'builtins'
+
+    _range = range
 
 _NUMBER_TYPES = (numbers.Number, numpy.number)
 _SHAPE_TYPES = (int, tuple)
@@ -304,7 +308,7 @@ READ_ONLY = True
 _FIELD_NAME = Field._fields.index('name')
 _FIELD_TYPE = Field._fields.index('type')
 _FIELD_ATTR_COUNT = len(Field._fields)
-_FIELD_REQUIRED_ARG_RANGE = range(
+_FIELD_REQUIRED_ARG_RANGE = _range(
     _FIELD_ATTR_COUNT - len(Field.__new__.__defaults__),
     _FIELD_ATTR_COUNT + 1)
 
@@ -424,7 +428,7 @@ class _IndirectAtomicArrayViewMixin(object):
 
     def __str__(self):
         return "[{0}]".format(', '.join(str(self._element_view(self._data, i))
-                                        for i in range(len(self._data))))
+                                        for i in _range(len(self._data))))
 
     def __getitem__(self, index):
         return self._element_view(self._data, index)
@@ -434,7 +438,7 @@ class _IndirectAtomicArrayViewMixin(object):
 
     def __iter__(self):
         return (self._element_view(self._data, i)
-                for i in range(len(self._data)))
+                for i in _range(len(self._data)))
 
     def __len__(self):
         return len(self._data)
@@ -663,7 +667,7 @@ def get_data(view):
     >>> import nani
     >>> data_type = nani.Number(type=numpy.int32)
     >>> dtype, _, view = nani.resolve(data_type)
-    >>> a = numpy.arange(10, dtype=dtype)
+    >>> a = numpy.a_range(10, dtype=dtype)
     >>> v = view(a)
     >>> nani.get_data(v) is a
     True
@@ -873,7 +877,7 @@ def _consolidate(data_type):
     elif isinstance(data_type, Structure):
         fields = tuple(
             Field(*(_consolidate(field[i]) if i == _FIELD_TYPE else field[i]
-                  for i in range(len(field))))
+                  for i in _range(len(field))))
             for field in data_type.fields)
         out = data_type._replace(fields=fields)
 
@@ -942,7 +946,7 @@ def _resolve_default(data_type, listify=False):
                  else data_type.shape)
         out = element_default
         for dimension in shape:
-            out = Sequence(copy.deepcopy(out) for _ in range(dimension))
+            out = Sequence(copy.deepcopy(out) for _ in _range(dimension))
     elif isinstance(data_type, Structure):
         if listify:
             out = [_resolve_default(field.type, listify=listify)
