@@ -554,7 +554,7 @@ _Nani = collections.namedtuple(
 
 class Nani(_Nani):
 
-    """Output structure from the function `resolve`.
+    """Output structure of the function `resolve`.
 
     Attributes
     ----------
