@@ -254,6 +254,13 @@ class MainTest(unittest.TestCase):
                 ('particle', particle.PARTICLE_TYPE),
             )
         )))
+        self.assertIsNotNone(nani.resolve(nani.Structure(
+            fields=[
+                ['position', vector2.VECTOR2_TYPE],
+                ['velocity', vector2.VECTOR2_TYPE],
+                ['particle', particle.PARTICLE_TYPE],
+            ]
+        )))
 
     def test_bool_invalid_attributes(self):
         self.assertRaises(TypeError, nani.resolve, nani.Bool(default=None))
@@ -359,12 +366,12 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=('abc', 123), name='Something'))
 
-        self.assertEqual(str(c.exception), "Each field from the attribute 'Something.fields' is expected to be a tuple but got 'str' instead.")
+        self.assertEqual(str(c.exception), "Each field from the attribute 'Something.fields' is expected to be an instance object of type 'list', or 'tuple' but got 'str' instead.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=(('abc',),), name='Whatever'))
 
-        self.assertEqual(str(c.exception), "Each field from the attribute 'Whatever.fields' is expected to be a tuple compatible with 'nani.Field' but got '('abc',)' instead.")
+        self.assertEqual(str(c.exception), "Each field from the attribute 'Whatever.fields' is expected to be an instance object of type 'list', or 'tuple' and compatible with 'nani.Field' but got '('abc',)' instead.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=((1, nani.Number()),), name='Moon'))
@@ -626,10 +633,10 @@ class MainTest(unittest.TestCase):
 
     def test_structure_flags(self):
         struct_type = nani.Structure(
-            fields=(
-                ('id', nani.Number(type=numpy.uint32)),
-                ('flags', nani.Number(type=numpy.uint8, view=flag.Flag))
-            ),
+            fields=[
+                ['id', nani.Number(type=numpy.uint32)],
+                ['flags', nani.Number(type=numpy.uint8, view=flag.Flag)]
+            ],
             name='Struct'
         )
         dtype, _, view = nani.resolve(struct_type)

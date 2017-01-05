@@ -795,17 +795,20 @@ def _check_data_type(data_type, parent_path):
         _check_data_type(data_type.element_type, full_path)
     elif isinstance(data_type, Structure):
         for field in data_type.fields:
-            if not isinstance(field, tuple):
+            if not isinstance(field, _SEQUENCE_TYPES):
                 raise TypeError(
                     "Each field from the attribute '%s.fields' is expected "
-                    "to be a tuple but got '%s' instead."
-                    % (full_path, _format_type(type(field))))
+                    "to be an instance object of type %s but got '%s' instead."
+                    % (full_path, _join_types(_SEQUENCE_TYPES, "or "),
+                       _format_type(type(field))))
 
             if len(field) not in _FIELD_REQUIRED_ARG_RANGE:
                 raise TypeError(
                     "Each field from the attribute '%s.fields' is expected "
-                    "to be a tuple compatible with '%s' but got '%s' "
-                    "instead." % (full_path, _format_type(Field), field))
+                    "to be an instance object of type %s and compatible with "
+                    "'%s' but got '%s' instead."
+                    % (full_path, _join_types(_SEQUENCE_TYPES, "or "),
+                       _format_type(Field), field))
 
             field = Field(*field)
             if not isinstance(field.name, _STRING_TYPES):
