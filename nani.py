@@ -736,11 +736,11 @@ def _check_data_type(data_type, parent_path):
         if parent_path:
             raise TypeError(
                 "The data type for '%s' is expected to be an instance "
-                "object but got the type '%s' instead."
+                "object, but got the type '%s' instead."
                 % (parent_path, _format_type(data_type)))
         else:
             raise TypeError(
-                "The data type is expected to be an instance object but got "
+                "The data type is expected to be an instance object, but got "
                 "the type '%s' instead." % (_format_type(data_type),))
 
     base = _find_base_type(data_type)
@@ -771,7 +771,7 @@ def _check_data_type(data_type, parent_path):
         elif isinstance(check, _FieldSubclassCheck):
             if not isinstance(attribute, _CLASS_TYPES):
                 raise TypeError(
-                    "The attribute '%s.%s' is expected to be a class "
+                    "The attribute '%s.%s' is expected to be a type "
                     "object%s." % (full_path, check.name,
                                    " or 'None'" if check.allow_none else ''))
 
@@ -779,16 +779,20 @@ def _check_data_type(data_type, parent_path):
 
         if not check_function(attribute, check.type):
             if isinstance(check, _FieldInstanceCheck):
-                glue = "an instance object of type"
+                glue_1 = "an instance object of type"
+                glue_2 = "not"
+                glue_3 = ""
                 type_name = _format_type(type(attribute))
             elif isinstance(check, _FieldSubclassCheck):
-                glue = "a subclass of"
+                glue_1 = "a subclass of"
+                glue_2 = "but got"
+                glue_3 = " instead"
                 type_name = _format_type(attribute)
 
             raise TypeError(
-                "The attribute '%s.%s' is expected to be %s %s, "
-                "not '%s'." % (full_path, check.name, glue,
-                               _join_types(check.type, "or "), type_name))
+                "The attribute '%s.%s' is expected to be %s %s, %s '%s'%s."
+                % (full_path, check.name, glue_1,
+                   _join_types(check.type, "or "), glue_2, type_name, glue_3))
 
     # Additional and/or recursive checks for specific attributes.
     if isinstance(data_type, Array):
@@ -798,16 +802,18 @@ def _check_data_type(data_type, parent_path):
             if not isinstance(field, _SEQUENCE_TYPES):
                 raise TypeError(
                     "Each field from the attribute '%s.fields' is expected "
-                    "to be an instance object of type %s but got '%s' instead."
-                    % (full_path, _join_types(_SEQUENCE_TYPES, "or "),
+                    "to be an instance object of type %s, not '%s'."
+                    % (full_path,
+                       _join_types(_SEQUENCE_TYPES + (Field,), "or "),
                        _format_type(type(field))))
 
             if len(field) not in _FIELD_REQUIRED_ARG_RANGE:
                 raise TypeError(
                     "Each field from the attribute '%s.fields' is expected "
-                    "to be an instance object of type %s and compatible with "
-                    "'%s' but got '%s' instead."
-                    % (full_path, _join_types(_SEQUENCE_TYPES, "or "),
+                    "to be an instance object of type %s, and compatible with "
+                    "the '%s' structure, but got %r instead."
+                    % (full_path,
+                       _join_types(_SEQUENCE_TYPES + (Field,), "or "),
                        _format_type(Field), field))
 
             field = Field(*field)

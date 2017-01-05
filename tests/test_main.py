@@ -331,7 +331,7 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Number)
 
-        self.assertEqual(str(c.exception), "The data type is expected to be an instance object but got the type 'nani.Number' instead.")
+        self.assertEqual(str(c.exception), "The data type is expected to be an instance object, but got the type 'nani.Number' instead.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(123)
@@ -346,12 +346,12 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Number(type=123))
 
-        self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a class object.")
+        self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a type object.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Array(element_type=nani.Number(), shape=0, view=123))
 
-        self.assertEqual(str(c.exception), "The attribute 'Array.view' is expected to be a class object or 'None'.")
+        self.assertEqual(str(c.exception), "The attribute 'Array.view' is expected to be a type object or 'None'.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Array(element_type=123, shape=0))
@@ -361,17 +361,17 @@ class MainTest(unittest.TestCase):
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Number(type=str))
 
-        self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a subclass of %s, not 'str'." % (_join_types(nani._NUMBER_TYPES, "or "),))
+        self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a subclass of %s, but got 'str' instead." % (_join_types(nani._NUMBER_TYPES, "or "),))
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=('abc', 123), name='Something'))
 
-        self.assertEqual(str(c.exception), "Each field from the attribute 'Something.fields' is expected to be an instance object of type 'list', or 'tuple' but got 'str' instead.")
+        self.assertEqual(str(c.exception), "Each field from the attribute 'Something.fields' is expected to be an instance object of type 'list', 'tuple', or 'nani.Field', not 'str'.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=(('abc',),), name='Whatever'))
 
-        self.assertEqual(str(c.exception), "Each field from the attribute 'Whatever.fields' is expected to be an instance object of type 'list', or 'tuple' and compatible with 'nani.Field' but got '('abc',)' instead.")
+        self.assertEqual(str(c.exception), "Each field from the attribute 'Whatever.fields' is expected to be an instance object of type 'list', 'tuple', or 'nani.Field', and compatible with the 'nani.Field' structure, but got ('abc',) instead.")
 
         with self.assertRaises(TypeError) as c:
             nani.resolve(nani.Structure(fields=((1, nani.Number()),), name='Moon'))
