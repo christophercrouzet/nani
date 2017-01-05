@@ -200,7 +200,7 @@ _Array.__new__.__defaults__ = (None, None)
 
 class Array(_Array):
 
-    """Type corresponding to a NumPy array.
+    """Type corresponding to a NumPy (sub)array.
 
     Attributes
     ----------

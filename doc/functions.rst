@@ -14,7 +14,18 @@ Functions
    get_element_view
 
 
+----
+
 .. autofunction:: resolve
+
+----
+
 .. autofunction:: update
+
+----
+
 .. autofunction:: get_data
+
+----
+
 .. autofunction:: get_element_view

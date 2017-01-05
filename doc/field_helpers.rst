@@ -5,13 +5,6 @@
 Field Helpers
 =============
 
-.. autosummary::
-   :nosignatures:
-
-   Field
-   READ_ONLY
-
-
 Structured arrays are described as a sequence of fields. Each field can be
 defined as a :class:`Field` or as a tuple compatible with the :class:`Field`
 structure.
@@ -26,10 +19,22 @@ keyword. Example:
    >>> import nani
    >>> data_type = nani.Structure(
    ...     fields=(
-   ...         ('do_not_touch', nani.Number(), nani.READ_ONLY)
+   ...         ('do_not_touch', nani.Number(), nani.READ_ONLY),
    ...     )
    ... )
 
 
+.. autosummary::
+   :nosignatures:
+
+   Field
+   READ_ONLY
+
+
+----
+
 .. autoclass:: Field(name, type, read_only=False)
+
+----
+
 .. autodata:: READ_ONLY
