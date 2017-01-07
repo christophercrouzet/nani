@@ -110,7 +110,13 @@ directly retrieve the source from the repository with the help of `Git`_:
 
    $ git clone https://github.com/christophercrouzet/nani.git
    $ cd nani
-   $ python setup.py develop
+   $ pip install --editable .[dev]
+
+
+.. note::
+
+   The ``[dev]`` part installs additional dependencies required to assist
+   development on Nani.
 
 ----
 
