@@ -1170,6 +1170,34 @@ def _format_type(cls):
         return '%s.%s' % (cls.__module__, cls.__name__)
 
 
+def _format_element(element, count, index, last_separator):
+    """Format an element from a sequence.
+
+    This only prepends a separator for the last element and wraps each element
+    with single quotes.
+
+    Parameters
+    ----------
+    element : object
+        Current element.
+    count : int
+        Total number of items in the sequence.
+    index : int
+        Current index.
+    last_separator : str
+        Separator to be used for joining the last element when multiple
+        elements are to be joined.
+
+    Returns
+    -------
+    str
+        The joined object string representations.
+    """
+    return ("%s'%s'" % (last_separator, element)
+            if count > 1 and index == count - 1
+            else "'%s'" % (element,))
+
+
 def _join_sequence(seq, last_separator=''):
     """Join a sequence into a string.
 
@@ -1186,14 +1214,9 @@ def _join_sequence(seq, last_separator=''):
     str
         The joined object string representations.
     """
-    def format(item, count, index):
-        return ("%s'%s'" % (last_separator, item)
-                if count > 1 and index == count - 1
-                else "'%s'" % (item,))
-
-
     count = len(seq)
-    return ', '.join(format(item, count, i) for i, item in enumerate(seq))
+    return ', '.join(_format_element(element, count, i, last_separator)
+                     for i, element in enumerate(seq))
 
 
 def _join_types(seq, last_separator=''):
