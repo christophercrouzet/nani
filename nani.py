@@ -727,7 +727,6 @@ def _check_data_type(data_type, parent_path):
         field_names = [field[_FIELD_NAME] for field in fields]
         return [item for item in field_names if field_names.count(item) > 1]
 
-
     # The following checks are not to enforce some sort of type checking
     # in place of Python's duck typing but rather to give a chance to provide
     # more meaningful error messages to the user.
@@ -754,7 +753,7 @@ def _check_data_type(data_type, parent_path):
     if not name:
         name = type(data_type).__name__
 
-    full_path = '%s.%s' %(parent_path, name) if parent_path else name
+    full_path = '%s.%s' % (parent_path, name) if parent_path else name
 
     # Generic checks for each attribute.
     for check in _TYPE_ATTR_CHECKS[base]:
@@ -1067,7 +1066,6 @@ def _define_structure_view(data_type):
             self._data[field_index] = value
 
         return None if read_only else setter
-
 
     field_views = [_resolve_view(field.type) for field in data_type.fields]
     mixins = (_StructuredViewMixin,)
