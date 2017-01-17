@@ -385,6 +385,16 @@ class _DirectArrayViewMixin(object):
     def __repr__(self):
         return "[%s]" % (', '.join(str(item) for item in self._data))
 
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return numpy.array_equal(self._data, other._data)
+
+        return NotImplemented
+
+    def __ne__(self, other):
+        is_equal = self.__eq__(other)
+        return is_equal if is_equal is NotImplemented else not is_equal
+
     def __getitem__(self, index):
         return self._data[index]
 
@@ -405,6 +415,8 @@ _MIXIN_ATTRIBUTES[_DirectArrayViewMixin] = (
     '__slots__',
     '__init__',
     '__repr__',
+    '__eq__',
+    '__ne__',
     '__getitem__',
     '__setitem__',
     '__iter__',
@@ -430,6 +442,16 @@ class _IndirectAtomicArrayViewMixin(object):
         return "[%s]" % (', '.join(str(self._element_view(self._data, i))
                                    for i in _range(len(self._data))))
 
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return numpy.array_equal(self._data, other._data)
+
+        return NotImplemented
+
+    def __ne__(self, other):
+        is_equal = self.__eq__(other)
+        return is_equal if is_equal is NotImplemented else not is_equal
+
     def __getitem__(self, index):
         return self._element_view(self._data, index)
 
@@ -451,6 +473,8 @@ _MIXIN_ATTRIBUTES[_IndirectAtomicArrayViewMixin] = (
     '__slots__',
     '__init__',
     '__repr__',
+    '__eq__',
+    '__ne__',
     '__getitem__',
     '__setitem__',
     '__iter__',
@@ -480,6 +504,16 @@ class _IndirectCompositeArrayViewMixin(object):
         return "[%s]" % (', '.join(str(self._element_view(item))
                                    for item in self._data))
 
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return numpy.array_equal(self._data, other._data)
+
+        return NotImplemented
+
+    def __ne__(self, other):
+        is_equal = self.__eq__(other)
+        return is_equal if is_equal is NotImplemented else not is_equal
+
     def __getitem__(self, index):
         return self._element_view(self._data[index])
 
@@ -500,6 +534,8 @@ _MIXIN_ATTRIBUTES[_IndirectCompositeArrayViewMixin] = (
     '__slots__',
     '__init__',
     '__repr__',
+    '__eq__',
+    '__ne__',
     '__getitem__',
     '__setitem__',
     '__iter__',
@@ -524,11 +560,23 @@ class _StructuredViewMixin(object):
                              for field in self._fields)
         return "%s(%s)" % (type(self).__name__, ', '.join(fields_and_values))
 
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return numpy.array_equal(self._data, other._data)
+
+        return NotImplemented
+
+    def __ne__(self, other):
+        is_equal = self.__eq__(other)
+        return is_equal if is_equal is NotImplemented else not is_equal
+
 
 _MIXIN_ATTRIBUTES[_StructuredViewMixin] = (
     '__slots__',
     '__init__',
     '__repr__',
+    '__eq__',
+    '__ne__',
 )
 
 
