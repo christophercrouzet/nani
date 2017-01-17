@@ -47,7 +47,6 @@ else:
     _range = range
 
 _NUMBER_TYPES = (numbers.Number, numpy.number)
-_SHAPE_TYPES = (int, tuple)
 _SEQUENCE_TYPES = (list, tuple)
 
 
@@ -357,7 +356,7 @@ _TYPE_ATTR_CHECKS = {
     ),
     Array: (
         _FieldInstanceCheck(name='element_type', type=_ALL),
-        _FieldInstanceCheck(name='shape', type=_SHAPE_TYPES),
+        _FieldInstanceCheck(name='shape', type=_SEQUENCE_TYPES + (int,)),
         _FieldInstanceCheck(name='name', type=_STRING_TYPES, allow_none=True),
         _FieldSubclassCheck(name='view', type=object, allow_none=True),
     ),
@@ -970,7 +969,7 @@ def _resolve_dtype(data_type):
         out = (_get_atomic_dtype(data_type), data_type.length)
     elif isinstance(data_type, Array):
         shape = data_type.shape
-        if isinstance(shape, tuple) and len(shape) == 1:
+        if isinstance(shape, _SEQUENCE_TYPES) and len(shape) == 1:
             # Workaround the exception `ValueError: invalid itemsize in
             # generic type tuple` when an `Array` of shape 0 or (0,) is nested
             # within another `Array`.

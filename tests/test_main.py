@@ -199,7 +199,7 @@ class MainTest(unittest.TestCase):
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=1)))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=1)))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=(0,))))
+        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=[0])))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=(0,))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=(0,))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=(0,))))
@@ -207,7 +207,7 @@ class MainTest(unittest.TestCase):
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(0,))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(0,))))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=(1,))))
+        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=[1])))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=(1,))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=(1,))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=(1,))))
@@ -215,7 +215,7 @@ class MainTest(unittest.TestCase):
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(1,))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(1,))))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=(1, 2))))
+        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=[1, 2])))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=(1, 2))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=(1, 2))))
         self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=(1, 2))))
