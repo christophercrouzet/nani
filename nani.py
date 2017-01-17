@@ -605,6 +605,27 @@ class Nani(_Nani):
     __slots__ = ()
 
 
+def validate(data_type):
+    """Check if a data type is well-formed.
+
+    Parameters
+    ----------
+    data_type : nani data type
+        Data type.
+
+    Returns
+    -------
+    bool
+        ``True`` if the data type is well-formed.
+
+    Raises
+    ------
+    TypeError or ValueError
+        The data type isn't well-formed.
+    """
+    return _validate(data_type, '')
+
+
 def resolve(data_type, name=None, listify_default=False, check=True):
     """Retrieve the properties for a given data type.
 
@@ -652,7 +673,7 @@ def resolve(data_type, name=None, listify_default=False, check=True):
     [255, 255, 255]
     """
     if check:
-        _check_data_type(data_type, '')
+        validate(data_type)
 
     data_type = _consolidate(data_type)
     return Nani(
@@ -754,8 +775,8 @@ def get_element_view(view):
     return getattr(view, '_element_view', None)
 
 
-def _check_data_type(data_type, parent_path):
-    """Check if the data type is well-formed.
+def _validate(data_type, parent_path):
+    """Implementation for :func:`validate`.
 
     Parameters
     ----------
@@ -764,12 +785,13 @@ def _check_data_type(data_type, parent_path):
     parent_path : str
         Parent path in the form of a dotted path.
 
+    bool
+        ``True`` if the data type is well-formed.
+
     Raises
     ------
-    TypeError
+    TypeError or ValueError
         The data type isn't well-formed.
-    ValueError
-        Duplicate structure fields were found.
     """
     def find_duplicate_fields(fields):
         field_names = [field[_FIELD_NAME] for field in fields]
@@ -777,10 +799,6 @@ def _check_data_type(data_type, parent_path):
         return [item for item in field_names
                 if field_names.count(item) > 1
                 and item not in seen and seen.add(item) is None]
-
-    # The following checks are not to enforce some sort of type checking
-    # in place of Python's duck typing but rather to give a chance to provide
-    # more meaningful error messages to the user.
 
     if isinstance(data_type, _CLASS_TYPES):
         raise TypeError(
@@ -840,7 +858,7 @@ def _check_data_type(data_type, parent_path):
 
     # Additional and/or recursive checks for specific attributes.
     if isinstance(data_type, Array):
-        _check_data_type(data_type.element_type, full_path)
+        _validate(data_type.element_type, full_path)
     elif isinstance(data_type, Structure):
         for field in data_type.fields:
             if not isinstance(field, _SEQUENCE_TYPES):
@@ -886,7 +904,7 @@ def _check_data_type(data_type, parent_path):
                                    _format_type(type(field.read_only))))
 
             field_path = '%s.%s' % (full_path, field.name)
-            _check_data_type(field.type, field_path)
+            _validate(field.type, field_path)
 
         duplicates = find_duplicate_fields(data_type.fields)
         if duplicates:
@@ -898,6 +916,8 @@ def _check_data_type(data_type, parent_path):
                 raise ValueError(
                     "The structure field '%s' was provided multiple times."
                     % (duplicates[0]),)
+
+    return True
 
 
 def _consolidate(data_type):
