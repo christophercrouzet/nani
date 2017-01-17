@@ -527,7 +527,7 @@ class _IndirectCompositeArrayViewMixin(object):
         return self._data.__len__()
 
     def __contains__(self, item):
-        return self._data.__contains__(self, item)
+        return item in self._data
 
 
 _MIXIN_ATTRIBUTES[_IndirectCompositeArrayViewMixin] = (
