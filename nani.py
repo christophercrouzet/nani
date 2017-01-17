@@ -773,7 +773,10 @@ def _check_data_type(data_type, parent_path):
     """
     def find_duplicate_fields(fields):
         field_names = [field[_FIELD_NAME] for field in fields]
-        return [item for item in field_names if field_names.count(item) > 1]
+        seen = set()
+        return [item for item in field_names
+                if field_names.count(item) > 1
+                and item not in seen and seen.add(item) is None]
 
     # The following checks are not to enforce some sort of type checking
     # in place of Python's duck typing but rather to give a chance to provide

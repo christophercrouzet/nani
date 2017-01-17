@@ -388,6 +388,11 @@ class MainTest(unittest.TestCase):
 
         self.assertEqual(str(c.exception), "The third element of each field from the attribute 'Structure.fields', that is the 'read_only' attribute, is expected to be an instance object of type 'bool', not 'float'.")
 
+        with self.assertRaises(ValueError) as c:
+            nani.resolve(nani.Structure(fields=(('id', nani.Number()), ('id', nani.Number()), ('duplicate', nani.Bool()), ('duplicate', nani.Number()))))
+
+        self.assertEqual(str(c.exception), "The structure fields 'id', and 'duplicate', were provided multiple times.")
+
     def test_update(self):
         data_type = nani.Number()
         new_data_type = nani.update(data_type, default=99)
