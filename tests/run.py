@@ -53,7 +53,7 @@ def _get_test_name(test):
 
 
 def _get_test_full_name(test):
-    return '%s.%s.%s' % (test.__class__.__module__, test.__class__.__name__,
+    return '%s.%s.%s' % (type(test).__module__, type(test).__name__,
                          _get_test_name(test))
 
 
