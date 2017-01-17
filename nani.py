@@ -780,15 +780,9 @@ def _check_data_type(data_type, parent_path):
     # more meaningful error messages to the user.
 
     if isinstance(data_type, _CLASS_TYPES):
-        if parent_path:
-            raise TypeError(
-                "The data type for '%s' is expected to be an instance "
-                "object, but got the type '%s' instead."
-                % (parent_path, _format_type(data_type)))
-        else:
-            raise TypeError(
-                "The data type is expected to be an instance object, but got "
-                "the type '%s' instead." % (_format_type(data_type),))
+        raise TypeError(
+            "The data type is expected to be an instance object, but got the "
+            "type '%s' instead." % (_format_type(data_type),))
 
     base = _find_base_type(data_type)
     if not base:
