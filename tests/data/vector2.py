@@ -12,7 +12,7 @@ class Vector2View(object):
     def __init__(self, data):
         self._data = data
 
-    def __str__(self):
+    def __repr__(self):
         return "(%s, %s)" % (self.x, self.y)
 
     @property

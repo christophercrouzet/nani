@@ -660,33 +660,321 @@ class MainTest(unittest.TestCase):
         self.assertFalse(v[3].flags.something)
         self.assertFalse(v[3].flags.whatever)
 
-        v[0].flags |= flag.WHATEVER
-        v[1].flags &= ~flag.WHATEVER
-        v[2].flags &= ~flag.WHATEVER
-        v[3].flags |= flag.SOMETHING
-        self.assertTrue(a[0]['flags'] & flag.SOMETHING != 0)
-        self.assertTrue(a[0]['flags'] & flag.WHATEVER != 0)
-        self.assertFalse(a[1]['flags'] & flag.SOMETHING != 0)
-        self.assertFalse(a[1]['flags'] & flag.WHATEVER != 0)
-        self.assertTrue(a[2]['flags'] & flag.SOMETHING != 0)
-        self.assertFalse(a[2]['flags'] & flag.WHATEVER != 0)
-        self.assertTrue(a[3]['flags'] & flag.SOMETHING != 0)
-        self.assertFalse(a[3]['flags'] & flag.WHATEVER != 0)
+        v[0].flags |= _flag.WHATEVER
+        v[1].flags &= ~_flag.WHATEVER
+        v[2].flags &= ~_flag.WHATEVER
+        v[3].flags |= _flag.SOMETHING
+        self.assertTrue(a[0]['flags'] & _flag.SOMETHING != 0)
+        self.assertTrue(a[0]['flags'] & _flag.WHATEVER != 0)
+        self.assertFalse(a[1]['flags'] & _flag.SOMETHING != 0)
+        self.assertFalse(a[1]['flags'] & _flag.WHATEVER != 0)
+        self.assertTrue(a[2]['flags'] & _flag.SOMETHING != 0)
+        self.assertFalse(a[2]['flags'] & _flag.WHATEVER != 0)
+        self.assertTrue(a[3]['flags'] & _flag.SOMETHING != 0)
+        self.assertFalse(a[3]['flags'] & _flag.WHATEVER != 0)
 
         v[0].flags.something = False
         v[1].flags.whatever = True
-        self.assertFalse(a[0]['flags'] & flag.SOMETHING != 0)
-        self.assertTrue(a[0]['flags'] & flag.WHATEVER != 0)
-        self.assertFalse(a[1]['flags'] & flag.SOMETHING != 0)
-        self.assertTrue(a[1]['flags'] & flag.WHATEVER != 0)
+        self.assertFalse(a[0]['flags'] & _flag.SOMETHING != 0)
+        self.assertTrue(a[0]['flags'] & _flag.WHATEVER != 0)
+        self.assertFalse(a[1]['flags'] & _flag.SOMETHING != 0)
+        self.assertTrue(a[1]['flags'] & _flag.WHATEVER != 0)
 
         first = v[0].flags
         first.something = True
-        first &= ~flag.WHATEVER
-        self.assertTrue(a[0]['flags'] & flag.SOMETHING != 0)
-        self.assertFalse(a[0]['flags'] & flag.WHATEVER != 0)
-        first |= flag.WHATEVER
-        self.assertTrue(a[0]['flags'] & flag.WHATEVER != 0)
+        first &= ~_flag.WHATEVER
+        self.assertTrue(a[0]['flags'] & _flag.SOMETHING != 0)
+        self.assertFalse(a[0]['flags'] & _flag.WHATEVER != 0)
+        first |= _flag.WHATEVER
+        self.assertTrue(a[0]['flags'] & _flag.WHATEVER != 0)
+
+    def test_array_view_1(self):
+        data_type = nani.Array(
+            element_type=nani.Number(type=numpy.int32),
+            shape=3,
+            view=None
+        )
+        dtype, _, view = nani.resolve(data_type)
+        a = numpy.array([(1, 2, 3), (4, 5, 6)], dtype=dtype)
+        b = numpy.array([(7, 8, 9), (10, 11, 12)], dtype=dtype)
+        v = view(a)
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [[1, 2, 3], [4, 5, 6]])
+        self.assertEqual(str(v), "[[1, 2, 3], [4, 5, 6]]")
+        self.assertEqual(v, view(a))
+        self.assertNotEqual(v, view(b))
+        self.assertEqual(v.__eq__([[1, 2, 3], [4, 5, 6]]), NotImplemented)
+        self.assertIs(v[0]._data.base, a)
+        self.assertIs(v[1]._data.base, a)
+        self.assertIsInstance(v[0], nani.get_element_view(view))
+        self.assertIsInstance(v[1], nani.get_element_view(view))
+        self.assertEqual([x for x in v], [view(a)[0], view(a)[1]])
+        self.assertNotEqual([x for x in v], [view(b)[0], view(b)[1]])
+        self.assertEqual(len(v), 2)
+        self.assertTrue(6 in v)
+        self.assertFalse(7 in v)
+
+        self.assertEqual(str(v[0]), "[1, 2, 3]")
+        self.assertEqual(str(v[1]), "[4, 5, 6]")
+        self.assertEqual(v[0], view(a)[0])
+        self.assertEqual(v[1], view(a)[1])
+        self.assertNotEqual(v[0], view(b)[0])
+        self.assertNotEqual(v[1], view(b)[1])
+        self.assertEqual(v[0].__eq__([1, 2, 3]), NotImplemented)
+        self.assertEqual(v[1].__eq__([4, 5, 6]), NotImplemented)
+        self.assertIsInstance(v[0][0], numpy.int32)
+        self.assertIsInstance(v[0][1], numpy.int32)
+        self.assertIsInstance(v[0][2], numpy.int32)
+        self.assertIsInstance(v[1][0], numpy.int32)
+        self.assertIsInstance(v[1][1], numpy.int32)
+        self.assertIsInstance(v[1][2], numpy.int32)
+        self.assertEqual(v[0][0], 1)
+        self.assertEqual(v[0][1], 2)
+        self.assertEqual(v[0][2], 3)
+        self.assertEqual(v[1][0], 4)
+        self.assertEqual(v[1][1], 5)
+        self.assertEqual(v[1][2], 6)
+        self.assertEqual([x for x in v[0]], [1, 2, 3])
+        self.assertEqual([x for x in v[1]], [4, 5, 6])
+        self.assertEqual(len(v[0]), 3)
+        self.assertEqual(len(v[1]), 3)
+        self.assertTrue(3 in v[0])
+        self.assertFalse(7 in v[0])
+        self.assertTrue(6 in v[1])
+        self.assertFalse(10 in v[1])
+
+        v[0] = [7, 8, 9]
+        v[1] = [10, 11, 12]
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [[7, 8, 9], [10, 11, 12]])
+        self.assertEqual(str(v), "[[7, 8, 9], [10, 11, 12]]")
+        self.assertEqual(v, view(a))
+        self.assertEqual(v, view(b))
+        self.assertEqual(v.__eq__([[7, 8, 9], [10, 11, 12]]), NotImplemented)
+        self.assertIs(v[0]._data.base, a)
+        self.assertIs(v[1]._data.base, a)
+        self.assertIsInstance(v[0], nani.get_element_view(view))
+        self.assertIsInstance(v[1], nani.get_element_view(view))
+        self.assertEqual([x for x in v], [view(a)[0], view(a)[1]])
+        self.assertEqual([x for x in v], [view(b)[0], view(b)[1]])
+        self.assertEqual(len(v), 2)
+        self.assertTrue(7 in v)
+        self.assertFalse(6 in v)
+
+        self.assertEqual(str(v[0]), "[7, 8, 9]")
+        self.assertEqual(str(v[1]), "[10, 11, 12]")
+        self.assertEqual(v[0], view(a)[0])
+        self.assertEqual(v[1], view(a)[1])
+        self.assertEqual(v[0], view(b)[0])
+        self.assertEqual(v[1], view(b)[1])
+        self.assertEqual(v[0].__eq__([7, 8, 9]), NotImplemented)
+        self.assertEqual(v[1].__eq__([10, 11, 12]), NotImplemented)
+        self.assertIsInstance(v[0][0], numpy.int32)
+        self.assertIsInstance(v[0][1], numpy.int32)
+        self.assertIsInstance(v[0][2], numpy.int32)
+        self.assertIsInstance(v[1][0], numpy.int32)
+        self.assertIsInstance(v[1][1], numpy.int32)
+        self.assertIsInstance(v[1][2], numpy.int32)
+        self.assertEqual(v[0][0], 7)
+        self.assertEqual(v[0][1], 8)
+        self.assertEqual(v[0][2], 9)
+        self.assertEqual(v[1][0], 10)
+        self.assertEqual(v[1][1], 11)
+        self.assertEqual(v[1][2], 12)
+        self.assertEqual([x for x in v[0]], [7, 8, 9])
+        self.assertEqual([x for x in v[1]], [10, 11, 12])
+        self.assertEqual(len(v[0]), 3)
+        self.assertEqual(len(v[1]), 3)
+        self.assertTrue(7 in v[0])
+        self.assertFalse(3 in v[0])
+        self.assertTrue(10 in v[1])
+        self.assertFalse(6 in v[1])
+
+        v[0][0] = 1
+        v[0][1] = 2
+        v[0][2] = 3
+        v[1][0] = 4
+        v[1][1] = 5
+        v[1][2] = 6
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [[1, 2, 3], [4, 5, 6]])
+        self.assertEqual(str(v), "[[1, 2, 3], [4, 5, 6]]")
+        self.assertEqual(v, view(a))
+        self.assertNotEqual(v, view(b))
+        self.assertEqual(v.__eq__([[1, 2, 3], [4, 5, 6]]), NotImplemented)
+        self.assertIs(v[0]._data.base, a)
+        self.assertIs(v[1]._data.base, a)
+        self.assertIsInstance(v[0], nani.get_element_view(view))
+        self.assertIsInstance(v[1], nani.get_element_view(view))
+        self.assertEqual([x for x in v], [view(a)[0], view(a)[1]])
+        self.assertNotEqual([x for x in v], [view(b)[0], view(b)[1]])
+        self.assertEqual(len(v), 2)
+        self.assertTrue(6 in v)
+        self.assertFalse(7 in v)
+
+        self.assertEqual(str(v[0]), "[1, 2, 3]")
+        self.assertEqual(str(v[1]), "[4, 5, 6]")
+        self.assertEqual(v[0], view(a)[0])
+        self.assertEqual(v[1], view(a)[1])
+        self.assertNotEqual(v[0], view(b)[0])
+        self.assertNotEqual(v[1], view(b)[1])
+        self.assertEqual(v[0].__eq__([1, 2, 3]), NotImplemented)
+        self.assertEqual(v[1].__eq__([4, 5, 6]), NotImplemented)
+        self.assertIsInstance(v[0][0], numpy.int32)
+        self.assertIsInstance(v[0][1], numpy.int32)
+        self.assertIsInstance(v[0][2], numpy.int32)
+        self.assertIsInstance(v[1][0], numpy.int32)
+        self.assertIsInstance(v[1][1], numpy.int32)
+        self.assertIsInstance(v[1][2], numpy.int32)
+        self.assertEqual(v[0][0], 1)
+        self.assertEqual(v[0][1], 2)
+        self.assertEqual(v[0][2], 3)
+        self.assertEqual(v[1][0], 4)
+        self.assertEqual(v[1][1], 5)
+        self.assertEqual(v[1][2], 6)
+        self.assertEqual([x for x in v[0]], [1, 2, 3])
+        self.assertEqual([x for x in v[1]], [4, 5, 6])
+        self.assertEqual(len(v[0]), 3)
+        self.assertEqual(len(v[1]), 3)
+        self.assertTrue(3 in v[0])
+        self.assertFalse(7 in v[0])
+        self.assertTrue(6 in v[1])
+        self.assertFalse(10 in v[1])
+
+    def test_array_view_2(self):
+        data_type = nani.Number(type=numpy.uint8, view=_flag.Flag)
+        dtype, _, view = nani.resolve(data_type)
+        a = numpy.array([_flag.NOTHING, _flag.NOTHING], dtype=dtype)
+        b = numpy.array([_flag.SOMETHING, _flag.WHATEVER], dtype=dtype)
+        v = view(a)
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [_flag.NOTHING, _flag.NOTHING])
+        self.assertEqual(str(v), "[NOTHING, NOTHING]")
+        self.assertEqual(v, view(a))
+        self.assertNotEqual(v, view(b))
+        self.assertEqual(v.__eq__([_flag.NOTHING, _flag.NOTHING]), NotImplemented)
+        self.assertIs(v[0]._data, a)
+        self.assertIs(v[1]._data, a)
+        self.assertIsInstance(v[0], _flag.Flag)
+        self.assertIsInstance(v[1], _flag.Flag)
+        self.assertEqual(v[0], _flag.NOTHING)
+        self.assertEqual(v[1], _flag.NOTHING)
+        self.assertEqual([x for x in v], [_flag.NOTHING, _flag.NOTHING])
+        self.assertEqual(len(v), 2)
+        self.assertTrue(_flag.NOTHING in v)
+        self.assertFalse(_flag.SOMETHING in v)
+
+        v[0] = _flag.SOMETHING
+        v[1] = _flag.WHATEVER
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [_flag.SOMETHING, _flag.WHATEVER])
+        self.assertEqual(str(v), "[SOMETHING, WHATEVER]")
+        self.assertEqual(v, view(a))
+        self.assertEqual(v, view(b))
+        self.assertEqual(v.__eq__([_flag.SOMETHING, _flag.WHATEVER]), NotImplemented)
+        self.assertIs(v[0]._data, a)
+        self.assertIs(v[1]._data, a)
+        self.assertIsInstance(v[0], _flag.Flag)
+        self.assertIsInstance(v[1], _flag.Flag)
+        self.assertEqual(v[0], _flag.SOMETHING)
+        self.assertEqual(v[1], _flag.WHATEVER)
+        self.assertEqual([x for x in v], [_flag.SOMETHING, _flag.WHATEVER])
+        self.assertEqual(len(v), 2)
+        self.assertTrue(_flag.SOMETHING in v)
+        self.assertFalse(_flag.NOTHING in v)
+
+    def test_structured_view(self):
+        data_type = nani.Structure(
+            fields=[
+                ('position', _vector2.VECTOR2_TYPE),
+                ('velocity', _vector2.VECTOR2_TYPE),
+            ],
+            name='Particle'
+        )
+        dtype, _, view = nani.resolve(data_type, name='Particles')
+        a = numpy.array([([1.0, 2.0], [3.0, 4.0]), ([5.0, 6.0], [7.0, 8.0])], dtype=dtype)
+        b = numpy.array([([8.0, 7.0], [6.0, 5.0]), ([4.0, 3.0], [2.0, 1.0])], dtype=dtype)
+        v = view(a)
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [([1.0, 2.0], [3.0, 4.0]), ([5.0, 6.0], [7.0, 8.0])])
+        self.assertEqual(str(v), "[Particle(position=(1.0, 2.0), velocity=(3.0, 4.0)), Particle(position=(5.0, 6.0), velocity=(7.0, 8.0))]")
+        self.assertEqual(v, view(a))
+        self.assertNotEqual(v, view(b))
+        self.assertEqual(v.__eq__([([1.0, 2.0], [3.0, 4.0]), ([5.0, 6.0], [7.0, 8.0])]), NotImplemented)
+        self.assertIsInstance(v[0], nani.get_element_view(view))
+        self.assertIsInstance(v[1], nani.get_element_view(view))
+        self.assertEqual([x for x in v], [view(a)[0], view(a)[1]])
+        self.assertNotEqual([x for x in v], [view(b)[0], view(b)[1]])
+        self.assertEqual(len(v), 2)
+
+        self.assertEqual(str(v[0]), "Particle(position=(1.0, 2.0), velocity=(3.0, 4.0))")
+        self.assertEqual(str(v[1]), "Particle(position=(5.0, 6.0), velocity=(7.0, 8.0))")
+        self.assertEqual(v[0], view(a)[0])
+        self.assertEqual(v[1], view(a)[1])
+        self.assertNotEqual(v[0], view(b)[0])
+        self.assertNotEqual(v[1], view(b)[1])
+        self.assertEqual(v[0].__eq__(([1.0, 2.0], [3.0, 4.0])), NotImplemented)
+        self.assertEqual(v[1].__eq__(([5.0, 6.0], [7.0, 7.0])), NotImplemented)
+        self.assertIsInstance(v[0].position, _vector2.Vector2View)
+        self.assertIsInstance(v[0].velocity, _vector2.Vector2View)
+        self.assertIsInstance(v[1].position, _vector2.Vector2View)
+        self.assertIsInstance(v[1].velocity, _vector2.Vector2View)
+        self.assertEqual(v[0].position.x, 1.0)
+        self.assertEqual(v[0].position.y, 2.0)
+        self.assertEqual(v[0].velocity.x, 3.0)
+        self.assertEqual(v[0].velocity.y, 4.0)
+        self.assertEqual(v[1].position.x, 5.0)
+        self.assertEqual(v[1].position.y, 6.0)
+        self.assertEqual(v[1].velocity.x, 7.0)
+        self.assertEqual(v[1].velocity.y, 8.0)
+
+        v[0].position.x = 8.0
+        v[0].position.y = 7.0
+        v[0].velocity.x = 6.0
+        v[0].velocity.y = 5.0
+        v[1].position.x = 4.0
+        v[1].position.y = 3.0
+        v[1].velocity.x = 2.0
+        v[1].velocity.y = 1.0
+
+        self.assertIs(v._data, a)
+        self.assertEqual(_array_to_list(a), [([8.0, 7.0], [6.0, 5.0]), ([4.0, 3.0], [2.0, 1.0])])
+        self.assertEqual(str(v), "[Particle(position=(8.0, 7.0), velocity=(6.0, 5.0)), Particle(position=(4.0, 3.0), velocity=(2.0, 1.0))]")
+        self.assertEqual(v, view(a))
+        self.assertEqual(v, view(b))
+        self.assertEqual(v.__eq__([([8.0, 7.0], [6.0, 5.0]), ([4.0, 3.0], [2.0, 1.0])]), NotImplemented)
+        self.assertIsInstance(v[0], nani.get_element_view(view))
+        self.assertIsInstance(v[1], nani.get_element_view(view))
+        self.assertEqual([x for x in v], [view(a)[0], view(a)[1]])
+        self.assertEqual([x for x in v], [view(b)[0], view(b)[1]])
+        self.assertEqual(len(v), 2)
+
+        self.assertEqual(str(v[0]), "Particle(position=(8.0, 7.0), velocity=(6.0, 5.0))")
+        self.assertEqual(str(v[1]), "Particle(position=(4.0, 3.0), velocity=(2.0, 1.0))")
+        self.assertEqual(v[0], view(a)[0])
+        self.assertEqual(v[1], view(a)[1])
+        self.assertEqual(v[0], view(b)[0])
+        self.assertEqual(v[1], view(b)[1])
+        self.assertEqual(v[0].__eq__(([8.0, 7.0], [6.0, 5.0])), NotImplemented)
+        self.assertEqual(v[1].__eq__(([4.0, 3.0], [2.0, 1.0])), NotImplemented)
+        self.assertIsInstance(v[0].position, _vector2.Vector2View)
+        self.assertIsInstance(v[0].velocity, _vector2.Vector2View)
+        self.assertIsInstance(v[1].position, _vector2.Vector2View)
+        self.assertIsInstance(v[1].velocity, _vector2.Vector2View)
+        self.assertEqual(v[0].position.x, 8.0)
+        self.assertEqual(v[0].position.y, 7.0)
+        self.assertEqual(v[0].velocity.x, 6.0)
+        self.assertEqual(v[0].velocity.y, 5.0)
+        self.assertEqual(v[1].position.x, 4.0)
+        self.assertEqual(v[1].position.y, 3.0)
+        self.assertEqual(v[1].velocity.x, 2.0)
+        self.assertEqual(v[1].velocity.y, 1.0)
 
 
 if __name__ == '__main__':

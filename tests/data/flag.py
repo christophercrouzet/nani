@@ -1,5 +1,12 @@
+NOTHING = 0
 SOMETHING = 1 << 0
 WHATEVER = 1 << 1
+
+_REPR = {
+    NOTHING: 'NOTHING',
+    SOMETHING: 'SOMETHING',
+    WHATEVER: 'WHATEVER',
+}
 
 
 class Flag(object):
@@ -7,8 +14,14 @@ class Flag(object):
         self._data = data
         self._index = index
 
-    def __str__(self):
-        return str(self._data[self._index])
+    def __repr__(self):
+        return _REPR[self._data[self._index]]
+
+    def __eq__(self, other):
+        return self._data[self._index] == other
+
+    def __ne__(self, other):
+        return self._data[self._index] != other
 
     def __int__(self):
         return int(self._data[self._index])
