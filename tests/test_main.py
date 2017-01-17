@@ -15,11 +15,11 @@ import numpy
 
 import nani
 
-from tests.data import flag
-from tests.data import numbers
-from tests.data import particle
-from tests.data import subtypes
-from tests.data import vector2
+from tests.data import flag as _flag
+from tests.data import numbers as _numbers
+from tests.data import particle as _particle
+from tests.data import subtypes as _subtypes
+from tests.data import vector2 as _vector2
 
 
 _PY2 = sys.version_info[0] == 2
@@ -149,7 +149,7 @@ class MainTest(unittest.TestCase):
         self.assertIsNotNone(nani.resolve(nani.Object(default=[])))
         self.assertIsNotNone(nani.resolve(nani.Object(default=())))
         self.assertIsNotNone(nani.resolve(nani.Object(default={})))
-        self.assertIsNotNone(nani.resolve(nani.Object(default=vector2.Vector2View)))
+        self.assertIsNotNone(nani.resolve(nani.Object(default=_vector2.Vector2View)))
 
     def test_number_valid_attributes(self):
         self.assertIsNotNone(nani.resolve(nani.Number(type=bool, default=True)))
@@ -160,13 +160,13 @@ class MainTest(unittest.TestCase):
         self.assertIsNotNone(nani.resolve(nani.Number(type=numpy.float32, default=1.23)))
         self.assertIsNotNone(nani.resolve(nani.Number(type=numpy.complex64, default=1 + 23j)))
 
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.Bool, default=True)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.Int, default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.Float, default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.Complex, default=1 + 23j)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.NumpyInt, default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.NumpyFloat, default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numbers.NumpyComplex, default=1 + 23j)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Bool, default=True)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Int, default=123)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Float, default=1.23)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Complex, default=1 + 23j)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.NumpyInt, default=123)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.NumpyFloat, default=1.23)))
+        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.NumpyComplex, default=1 + 23j)))
 
     def test_string_valid_attributes(self):
         if _PY2:
@@ -241,24 +241,24 @@ class MainTest(unittest.TestCase):
         )))
         self.assertIsNotNone(nani.resolve(nani.Structure(
             fields=(
-                ('position', vector2.VECTOR2_TYPE),
-                ('velocity', vector2.VECTOR2_TYPE),
-                ('targets', nani.Array(element_type=vector2.VECTOR2_TYPE, shape=1)),
-                ('particle', particle.PARTICLE_TYPE),
+                ('position', _vector2.VECTOR2_TYPE),
+                ('velocity', _vector2.VECTOR2_TYPE),
+                ('targets', nani.Array(element_type=_vector2.VECTOR2_TYPE, shape=1)),
+                ('particle', _particle.PARTICLE_TYPE),
             )
         )))
         self.assertIsNotNone(nani.resolve(nani.Structure(
             fields=(
-                ('position', vector2.VECTOR2_TYPE),
-                ('velocity', vector2.VECTOR2_TYPE),
-                ('particle', particle.PARTICLE_TYPE),
+                ('position', _vector2.VECTOR2_TYPE),
+                ('velocity', _vector2.VECTOR2_TYPE),
+                ('particle', _particle.PARTICLE_TYPE),
             )
         )))
         self.assertIsNotNone(nani.resolve(nani.Structure(
             fields=[
-                ['position', vector2.VECTOR2_TYPE],
-                ['velocity', vector2.VECTOR2_TYPE],
-                ['particle', particle.PARTICLE_TYPE],
+                ['position', _vector2.VECTOR2_TYPE],
+                ['velocity', _vector2.VECTOR2_TYPE],
+                ['particle', _particle.PARTICLE_TYPE],
             ]
         )))
 
@@ -302,19 +302,19 @@ class MainTest(unittest.TestCase):
         self.assertRaises(ValueError, nani.resolve, nani.Structure(fields=(('duplicate', nani.Number()), ('duplicate', nani.Bool()))))
 
     def test_subtypes(self):
-        self.assertIsNotNone(nani.resolve(subtypes.Bool()))
-        self.assertIsNotNone(nani.resolve(subtypes.Object()))
-        self.assertIsNotNone(nani.resolve(subtypes.Number()))
-        self.assertIsNotNone(nani.resolve(subtypes.Array(element_type=nani.Number(), shape=1)))
-        self.assertIsNotNone(nani.resolve(subtypes.Structure(fields=())))
+        self.assertIsNotNone(nani.resolve(_subtypes.Bool()))
+        self.assertIsNotNone(nani.resolve(_subtypes.Object()))
+        self.assertIsNotNone(nani.resolve(_subtypes.Number()))
+        self.assertIsNotNone(nani.resolve(_subtypes.Array(element_type=nani.Number(), shape=1)))
+        self.assertIsNotNone(nani.resolve(_subtypes.Structure(fields=())))
 
     def test_without_listify(self):
-        _, default, _ = nani.resolve(particle.PARTICLE_TYPE)
+        _, default, _ = nani.resolve(_particle.PARTICLE_TYPE)
         self.assertEqual(default, (numpy.uint32(-1), (0.0, 0.0), 1.0, None))
         self.assertEqual(default._fields, ('id', 'position', 'mass', 'neighbours'))
 
     def test_with_listify(self):
-        _, default, _ = nani.resolve(particle.PARTICLE_TYPE, listify_default=True)
+        _, default, _ = nani.resolve(_particle.PARTICLE_TYPE, listify_default=True)
         self.assertEqual(default, [numpy.uint32(-1), [0.0, 0.0], 1.0, None])
 
     def test_deep_copy(self):
@@ -427,7 +427,7 @@ class MainTest(unittest.TestCase):
 
     def test_particles(self):
         # Create a simple array of particles.
-        particle_type = particle.PARTICLE_TYPE
+        particle_type = _particle.PARTICLE_TYPE
         particle_count = 4
         user_default = [(i, [0, 0], 1.0, []) for i in range(particle_count)]
         expected_dtype = [
@@ -586,12 +586,12 @@ class MainTest(unittest.TestCase):
         ])
 
     def test_array_flags(self):
-        flag_type = nani.Number(type=numpy.uint8, view=flag.Flag)
+        flag_type = nani.Number(type=numpy.uint8, view=_flag.Flag)
         dtype, _, view = nani.resolve(flag_type, name='Flags')
         a = numpy.zeros(4, dtype=dtype)
-        a[0] |= flag.SOMETHING
-        a[1] |= flag.WHATEVER
-        a[2] |= flag.SOMETHING | flag.WHATEVER
+        a[0] |= _flag.SOMETHING
+        a[1] |= _flag.WHATEVER
+        a[2] |= _flag.SOMETHING | _flag.WHATEVER
 
         v = view(a)
         self.assertTrue(v[0].something)
@@ -603,47 +603,47 @@ class MainTest(unittest.TestCase):
         self.assertFalse(v[3].something)
         self.assertFalse(v[3].whatever)
 
-        v[0] |= flag.WHATEVER
-        v[1] &= ~flag.WHATEVER
-        v[2] &= ~flag.WHATEVER
-        v[3] |= flag.SOMETHING
-        self.assertTrue(a[0] & flag.SOMETHING != 0)
-        self.assertTrue(a[0] & flag.WHATEVER != 0)
-        self.assertFalse(a[1] & flag.SOMETHING != 0)
-        self.assertFalse(a[1] & flag.WHATEVER != 0)
-        self.assertTrue(a[2] & flag.SOMETHING != 0)
-        self.assertFalse(a[2] & flag.WHATEVER != 0)
-        self.assertTrue(a[3] & flag.SOMETHING != 0)
-        self.assertFalse(a[3] & flag.WHATEVER != 0)
+        v[0] |= _flag.WHATEVER
+        v[1] &= ~_flag.WHATEVER
+        v[2] &= ~_flag.WHATEVER
+        v[3] |= _flag.SOMETHING
+        self.assertTrue(a[0] & _flag.SOMETHING != 0)
+        self.assertTrue(a[0] & _flag.WHATEVER != 0)
+        self.assertFalse(a[1] & _flag.SOMETHING != 0)
+        self.assertFalse(a[1] & _flag.WHATEVER != 0)
+        self.assertTrue(a[2] & _flag.SOMETHING != 0)
+        self.assertFalse(a[2] & _flag.WHATEVER != 0)
+        self.assertTrue(a[3] & _flag.SOMETHING != 0)
+        self.assertFalse(a[3] & _flag.WHATEVER != 0)
 
         v[0].something = False
         v[1].whatever = True
-        self.assertFalse(a[0] & flag.SOMETHING != 0)
-        self.assertTrue(a[0] & flag.WHATEVER != 0)
-        self.assertFalse(a[1] & flag.SOMETHING != 0)
-        self.assertTrue(a[1] & flag.WHATEVER != 0)
+        self.assertFalse(a[0] & _flag.SOMETHING != 0)
+        self.assertTrue(a[0] & _flag.WHATEVER != 0)
+        self.assertFalse(a[1] & _flag.SOMETHING != 0)
+        self.assertTrue(a[1] & _flag.WHATEVER != 0)
 
         first = v[0]
         first.something = True
-        first &= ~flag.WHATEVER
-        self.assertTrue(a[0] & flag.SOMETHING != 0)
-        self.assertFalse(a[0] & flag.WHATEVER != 0)
-        first |= flag.WHATEVER
-        self.assertTrue(a[0] & flag.WHATEVER != 0)
+        first &= ~_flag.WHATEVER
+        self.assertTrue(a[0] & _flag.SOMETHING != 0)
+        self.assertFalse(a[0] & _flag.WHATEVER != 0)
+        first |= _flag.WHATEVER
+        self.assertTrue(a[0] & _flag.WHATEVER != 0)
 
     def test_structure_flags(self):
         struct_type = nani.Structure(
             fields=[
                 ['id', nani.Number(type=numpy.uint32)],
-                ['flags', nani.Number(type=numpy.uint8, view=flag.Flag)]
+                ['flags', nani.Number(type=numpy.uint8, view=_flag.Flag)]
             ],
             name='Struct'
         )
         dtype, _, view = nani.resolve(struct_type)
         a = numpy.zeros(4, dtype=dtype)
-        a[0]['flags'] |= flag.SOMETHING
-        a[1]['flags'] |= flag.WHATEVER
-        a[2]['flags'] |= flag.SOMETHING | flag.WHATEVER
+        a[0]['flags'] |= _flag.SOMETHING
+        a[1]['flags'] |= _flag.WHATEVER
+        a[2]['flags'] |= _flag.SOMETHING | _flag.WHATEVER
 
         v = view(a)
         self.assertTrue(v[0].flags.something)
