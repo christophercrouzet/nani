@@ -97,16 +97,19 @@ class MainTest(unittest.TestCase):
         data_type = nani.Bool()
         self.assertEqual(data_type, (False, None))
         self.assertEqual(data_type._fields, ('default', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_object_constructor(self):
         data_type = nani.Object()
         self.assertEqual(data_type, (None, None))
         self.assertEqual(data_type._fields, ('default', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_number_constructor(self):
         data_type = nani.Number()
         self.assertEqual(data_type, (numpy.float_, 0, None))
         self.assertEqual(data_type._fields, ('type', 'default', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_string_constructor(self):
         self.assertRaises(TypeError, nani.String)
@@ -114,6 +117,7 @@ class MainTest(unittest.TestCase):
         data_type = nani.String(length=8)
         self.assertEqual(data_type, (8, _BuiltinString(), None))
         self.assertEqual(data_type._fields, ('length', 'default', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_unicode_constructor(self):
         self.assertRaises(TypeError, nani.Unicode)
@@ -121,6 +125,7 @@ class MainTest(unittest.TestCase):
         data_type = nani.Unicode(length=8)
         self.assertEqual(data_type, (8, _BuiltinUnicode(), None))
         self.assertEqual(data_type._fields, ('length', 'default', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_array_constructor(self):
         self.assertRaises(TypeError, nani.Array)
@@ -129,6 +134,7 @@ class MainTest(unittest.TestCase):
         data_type = nani.Array(element_type=nani.Number(), shape=1)
         self.assertEqual(data_type, (nani.Number(), 1, None, None))
         self.assertEqual(data_type._fields, ('element_type', 'shape', 'name', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_structure_constructor(self):
         self.assertRaises(TypeError, nani.Structure)
@@ -136,100 +142,286 @@ class MainTest(unittest.TestCase):
         data_type = nani.Structure(fields=())
         self.assertEqual(data_type, ((), None, None))
         self.assertEqual(data_type._fields, ('fields', 'name', 'view'))
+        self.assertTrue(nani.validate(data_type))
 
     def test_bool_valid_attributes(self):
-        self.assertIsNotNone(nani.resolve(nani.Bool(default=True)))
-        self.assertIsNotNone(nani.resolve(nani.Bool(default=False)))
+        data_type = nani.Bool(default=True)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Bool(default=False)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
     def test_object_valid_attributes(self):
-        self.assertIsNotNone(nani.resolve(nani.Object(default=None)))
-        self.assertIsNotNone(nani.resolve(nani.Object(default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Object(default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Object(default='abc')))
-        self.assertIsNotNone(nani.resolve(nani.Object(default=[])))
-        self.assertIsNotNone(nani.resolve(nani.Object(default=())))
-        self.assertIsNotNone(nani.resolve(nani.Object(default={})))
-        self.assertIsNotNone(nani.resolve(nani.Object(default=_vector2.Vector2View)))
+        data_type = nani.Object(default=None)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default=123)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default=1.23)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default='abc')
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default=[])
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default=())
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default={})
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Object(default=_vector2.Vector2View)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
     def test_number_valid_attributes(self):
-        self.assertIsNotNone(nani.resolve(nani.Number(type=bool, default=True)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=int, default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=float, default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=complex, default=1 + 23j)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numpy.int32, default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numpy.float32, default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=numpy.complex64, default=1 + 23j)))
+        data_type = nani.Number(type=bool, default=True)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Bool, default=True)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Int, default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Float, default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.Complex, default=1 + 23j)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.NumpyInt, default=123)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.NumpyFloat, default=1.23)))
-        self.assertIsNotNone(nani.resolve(nani.Number(type=_numbers.NumpyComplex, default=1 + 23j)))
+        data_type = nani.Number(type=int, default=123)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=float, default=1.23)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=complex, default=1 + 23j)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=numpy.int32, default=123)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=numpy.float32, default=1.23)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=numpy.complex64, default=1 + 23j)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.Bool, default=True)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.Int, default=123)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.Float, default=1.23)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.Complex, default=1 + 23j)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.NumpyInt, default=123)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.NumpyFloat, default=1.23)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Number(type=_numbers.NumpyComplex, default=1 + 23j)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
     def test_string_valid_attributes(self):
         if _PY2:
-            self.assertIsNotNone(nani.resolve(nani.String(length=8, default='abc')))
-            self.assertIsNotNone(nani.resolve(nani.String(length=8, default=b'abc')))
+            data_type = nani.String(length=8, default='abc')
+            self.assertTrue(nani.validate(data_type))
+            self.assertIsNotNone(nani.resolve(data_type))
+
+            data_type = nani.String(length=8, default=b'abc')
+            self.assertTrue(nani.validate(data_type))
+            self.assertIsNotNone(nani.resolve(data_type))
         else:
-            self.assertIsNotNone(nani.resolve(nani.String(length=8, default=b'abc')))
+            data_type = nani.String(length=8, default=b'abc')
+            self.assertTrue(nani.validate(data_type))
+            self.assertIsNotNone(nani.resolve(data_type))
 
     def test_unicode_valid_attributes(self):
         if _PY2:
-            self.assertIsNotNone(nani.resolve(nani.Unicode(length=8, default=u'abc')))
+            data_type = nani.Unicode(length=8, default=u'abc')
+            self.assertTrue(nani.validate(data_type))
+            self.assertIsNotNone(nani.resolve(data_type))
         else:
-            self.assertIsNotNone(nani.resolve(nani.Unicode(length=8, default='abc')))
-            self.assertIsNotNone(nani.resolve(nani.Unicode(length=8, default=u'abc')))
+            data_type = nani.Unicode(length=8, default='abc')
+            self.assertTrue(nani.validate(data_type))
+            self.assertIsNotNone(nani.resolve(data_type))
+
+            data_type = nani.Unicode(length=8, default=u'abc')
+            self.assertTrue(nani.validate(data_type))
+            self.assertIsNotNone(nani.resolve(data_type))
 
     def test_array_valid_attributes(self):
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=0)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=0)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=0)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=0)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Unicode(length=8), shape=0)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=0)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=0)))
+        data_type = nani.Array(element_type=nani.Bool(), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=1)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=1)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=1)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=1)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Unicode(length=8), shape=1)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=1)))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=1)))
+        data_type = nani.Array(element_type=nani.Object(), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=[0])))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=(0,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=(0,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=(0,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Unicode(length=8), shape=(0,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(0,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(0,))))
+        data_type = nani.Array(element_type=nani.Number(), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=[1])))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=(1,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=(1,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=(1,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Unicode(length=8), shape=(1,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(1,))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(1,))))
+        data_type = nani.Array(element_type=nani.String(length=8), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Bool(), shape=[1, 2])))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Object(), shape=(1, 2))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Number(), shape=(1, 2))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.String(length=8), shape=(1, 2))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Unicode(length=8), shape=(1, 2))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(1, 2))))
-        self.assertIsNotNone(nani.resolve(nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(1, 2))))
+        data_type = nani.Array(element_type=nani.Unicode(length=8), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=0)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Bool(), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Object(), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Number(), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.String(length=8), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Unicode(length=8), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Bool(), shape=[0])
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Object(), shape=(0,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Number(), shape=(0,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.String(length=8), shape=(0,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Unicode(length=8), shape=(0,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(0,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(0,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Bool(), shape=[1])
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Object(), shape=(1,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Number(), shape=(1,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.String(length=8), shape=(1,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Unicode(length=8), shape=(1,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(1,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(1,))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Bool(), shape=[1, 2])
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Object(), shape=(1, 2))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Number(), shape=(1, 2))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.String(length=8), shape=(1, 2))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Unicode(length=8), shape=(1, 2))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=1), shape=(1, 2))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Array(element_type=nani.Structure(fields=(('number', nani.Number()),)), shape=(1, 2))
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
     def test_structure_valid_attributes(self):
-        self.assertIsNotNone(nani.resolve(nani.Structure(
+        data_type = nani.Structure(
             fields=(
                 ('number', nani.Number()),
             )
-        )))
-        self.assertIsNotNone(nani.resolve(nani.Structure(
+        )
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Structure(
             fields=(
                 ('bool', nani.Bool()),
                 ('string', nani.String(length=8)),
@@ -238,29 +430,40 @@ class MainTest(unittest.TestCase):
                     ('unicode', nani.Unicode(length=8)),
                 ))),
             )
-        )))
-        self.assertIsNotNone(nani.resolve(nani.Structure(
+        )
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Structure(
             fields=(
                 ('position', _vector2.VECTOR2_TYPE),
                 ('velocity', _vector2.VECTOR2_TYPE),
                 ('targets', nani.Array(element_type=_vector2.VECTOR2_TYPE, shape=1)),
                 ('particle', _particle.PARTICLE_TYPE),
             )
-        )))
-        self.assertIsNotNone(nani.resolve(nani.Structure(
+        )
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Structure(
             fields=(
                 ('position', _vector2.VECTOR2_TYPE),
                 ('velocity', _vector2.VECTOR2_TYPE),
                 ('particle', _particle.PARTICLE_TYPE),
             )
-        )))
-        self.assertIsNotNone(nani.resolve(nani.Structure(
+        )
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = nani.Structure(
             fields=[
                 ['position', _vector2.VECTOR2_TYPE],
                 ['velocity', _vector2.VECTOR2_TYPE],
                 ['particle', _particle.PARTICLE_TYPE],
             ]
-        )))
+        )
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
     def test_bool_invalid_attributes(self):
         self.assertRaises(TypeError, nani.validate, nani.Bool(default=None))
@@ -301,26 +504,47 @@ class MainTest(unittest.TestCase):
         self.assertRaises(ValueError, nani.validate, nani.Structure(fields=(('duplicate', nani.Number()), ('duplicate', nani.Bool()))))
 
     def test_subtypes(self):
-        self.assertIsNotNone(nani.resolve(_subtypes.Bool()))
-        self.assertIsNotNone(nani.resolve(_subtypes.Object()))
-        self.assertIsNotNone(nani.resolve(_subtypes.Number()))
-        self.assertIsNotNone(nani.resolve(_subtypes.Array(element_type=nani.Number(), shape=1)))
-        self.assertIsNotNone(nani.resolve(_subtypes.Structure(fields=())))
+        data_type = _subtypes.Bool()
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = _subtypes.Object()
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = _subtypes.Number()
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = _subtypes.Array(element_type=nani.Number(), shape=1)
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
+
+        data_type = _subtypes.Structure(fields=())
+        self.assertTrue(nani.validate(data_type))
+        self.assertIsNotNone(nani.resolve(data_type))
 
     def test_without_listify(self):
+        self.assertTrue(nani.validate(_particle.PARTICLE_TYPE))
+
         _, default, _ = nani.resolve(_particle.PARTICLE_TYPE)
         self.assertEqual(default, (numpy.uint32(-1), (0.0, 0.0), 1.0, None))
         self.assertEqual(default._fields, ('id', 'position', 'mass', 'neighbours'))
 
     def test_with_listify(self):
+        self.assertTrue(nani.validate(_particle.PARTICLE_TYPE))
+
         _, default, _ = nani.resolve(_particle.PARTICLE_TYPE, listify_default=True)
         self.assertEqual(default, [numpy.uint32(-1), [0.0, 0.0], 1.0, None])
 
     def test_deep_copy(self):
-        _, default, _ = nani.resolve(nani.Array(
+        data_type = nani.Array(
             element_type=nani.Object(default=[]),
             shape=2
-        ))
+        )
+        self.assertTrue(nani.validate(data_type))
+
+        _, default, _ = nani.resolve(data_type)
         self.assertEqual(default, ([], []))
 
         default[0].append('local')
@@ -412,6 +636,8 @@ class MainTest(unittest.TestCase):
 
     def test_get_data(self):
         data_type = nani.Number(type=numpy.int32)
+        self.assertTrue(nani.validate(data_type))
+
         dtype, _, view = nani.resolve(data_type)
         a = numpy.arange(10, dtype=dtype)
         v = view(a)
@@ -419,6 +645,8 @@ class MainTest(unittest.TestCase):
 
     def test_view(self):
         data_type = nani.Number(type=numpy.int32)
+        self.assertTrue(nani.validate(data_type))
+
         dtype, _, view = nani.resolve(data_type)
         a = numpy.arange(10, dtype=dtype)
         v = view(a)
@@ -441,6 +669,7 @@ class MainTest(unittest.TestCase):
             ('neighbours', numpy.object_)
         ]
         expected_default = (numpy.uint32(-1), (0.0, 0.0), 1.0, None)
+        self.assertTrue(nani.validate(particle_type))
 
         dtype, default, view = nani.resolve(particle_type, name='Particles')
         self.assertEqual(dtype, expected_dtype)
@@ -497,6 +726,8 @@ class MainTest(unittest.TestCase):
             name='Particle',
             view=None
         )
+        self.assertTrue(nani.validate(particle_type))
+
         _, _, view = nani.resolve(particle_type, name='Particles')
         self.assertEqual(view.__name__, 'Particles')
 
@@ -547,6 +778,8 @@ class MainTest(unittest.TestCase):
             name='Particle',
             view=None
         )
+        self.assertTrue(nani.validate(particle_type))
+
         _, _, view = nani.resolve(particle_type, name='Particles')
 
         v = view(a)
@@ -568,6 +801,8 @@ class MainTest(unittest.TestCase):
             ),
             view=None
         )
+        self.assertTrue(nani.validate(particle_type))
+
         _, _, view = nani.resolve(particle_type, name='Particles')
         a = [
             [0, [2.5, 3.5], 1.0, [0]],
@@ -591,6 +826,8 @@ class MainTest(unittest.TestCase):
 
     def test_array_flags(self):
         flag_type = nani.Number(type=numpy.uint8, view=_flag.Flag)
+        self.assertTrue(nani.validate(flag_type))
+
         dtype, _, view = nani.resolve(flag_type, name='Flags')
         a = numpy.zeros(4, dtype=dtype)
         a[0] |= _flag.SOMETHING
@@ -643,6 +880,8 @@ class MainTest(unittest.TestCase):
             ],
             name='Struct'
         )
+        self.assertTrue(nani.validate(struct_type))
+
         dtype, _, view = nani.resolve(struct_type)
         a = numpy.zeros(4, dtype=dtype)
         a[0]['flags'] |= _flag.SOMETHING
@@ -693,6 +932,8 @@ class MainTest(unittest.TestCase):
             shape=3,
             view=None
         )
+        self.assertTrue(nani.validate(data_type))
+
         dtype, _, view = nani.resolve(data_type)
         a = numpy.array([(1, 2, 3), (4, 5, 6)], dtype=dtype)
         b = numpy.array([(7, 8, 9), (10, 11, 12)], dtype=dtype)
@@ -845,6 +1086,8 @@ class MainTest(unittest.TestCase):
 
     def test_array_view_2(self):
         data_type = nani.Number(type=numpy.uint8, view=_flag.Flag)
+        self.assertTrue(nani.validate(data_type))
+
         dtype, _, view = nani.resolve(data_type)
         a = numpy.array([_flag.NOTHING, _flag.NOTHING], dtype=dtype)
         b = numpy.array([_flag.SOMETHING, _flag.WHATEVER], dtype=dtype)
@@ -896,6 +1139,8 @@ class MainTest(unittest.TestCase):
             name='Particle'
         )
         dtype, _, view = nani.resolve(data_type, name='Particles')
+        self.assertTrue(nani.validate(data_type))
+
         a = numpy.array([([1.0, 2.0], [3.0, 4.0]), ([5.0, 6.0], [7.0, 8.0])], dtype=dtype)
         b = numpy.array([([8.0, 7.0], [6.0, 5.0]), ([4.0, 3.0], [2.0, 1.0])], dtype=dtype)
         v = view(a)
