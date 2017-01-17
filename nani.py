@@ -625,7 +625,7 @@ def validate(data_type):
     return _validate(data_type, '')
 
 
-def resolve(data_type, name=None, listify_default=False, check=True):
+def resolve(data_type, name=None, listify_default=False):
     """Retrieve the properties for a given data type.
 
     This is the main routine where most of the work is done. It converts
@@ -643,8 +643,6 @@ def resolve(data_type, name=None, listify_default=False, check=True):
         This might cause the output to be incompatible with array creation
         routines such as ``numpy.array`` but it should still work for
         element assignment.
-    check : bool
-        ``False`` to not check if ``data_type`` is well formed.
 
     Returns
     -------
@@ -671,9 +669,6 @@ def resolve(data_type, name=None, listify_default=False, check=True):
     [255, 255, 255]
     [255, 255, 255]
     """
-    if check:
-        validate(data_type)
-
     data_type = _consolidate(data_type)
     return Nani(
         dtype=numpy.dtype(_resolve_dtype(data_type)),

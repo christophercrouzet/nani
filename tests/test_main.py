@@ -263,43 +263,42 @@ class MainTest(unittest.TestCase):
         )))
 
     def test_bool_invalid_attributes(self):
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default=None))
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default=123))
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default=1.23))
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default='abc'))
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default=[]))
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default=()))
-        self.assertRaises(TypeError, nani.resolve, nani.Bool(default={}))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default=None))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default=123))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default=1.23))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default='abc'))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default=[]))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default=()))
+        self.assertRaises(TypeError, nani.validate, nani.Bool(default={}))
 
     def test_number_invalid_attributes(self):
-        self.assertRaises(TypeError, nani.resolve, nani.Number(type=None))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(type=numpy.bool_))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(type=numpy.object_))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(type=numpy.string_))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(type=numpy.unicode_))
+        self.assertRaises(TypeError, nani.validate, nani.Number(type=None))
+        self.assertRaises(TypeError, nani.validate, nani.Number(type=numpy.bool_))
+        self.assertRaises(TypeError, nani.validate, nani.Number(type=numpy.object_))
+        self.assertRaises(TypeError, nani.validate, nani.Number(type=numpy.string_))
+        self.assertRaises(TypeError, nani.validate, nani.Number(type=numpy.unicode_))
 
-        self.assertRaises(TypeError, nani.resolve, nani.Number(default=None))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(default='abc'))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(default=[]))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(default=()))
-        self.assertRaises(TypeError, nani.resolve, nani.Number(default={}))
+        self.assertRaises(TypeError, nani.validate, nani.Number(default=None))
+        self.assertRaises(TypeError, nani.validate, nani.Number(default='abc'))
+        self.assertRaises(TypeError, nani.validate, nani.Number(default=[]))
+        self.assertRaises(TypeError, nani.validate, nani.Number(default=()))
+        self.assertRaises(TypeError, nani.validate, nani.Number(default={}))
 
     def test_string_invalid_attributes(self):
-        self.assertRaises(TypeError, nani.resolve, nani.String(length=1.23))
-        self.assertRaises(TypeError, nani.resolve, nani.String(length='abc'))
-        self.assertRaises(TypeError, nani.resolve, nani.String(length=[8]))
+        self.assertRaises(TypeError, nani.validate, nani.String(length=1.23))
+        self.assertRaises(TypeError, nani.validate, nani.String(length='abc'))
+        self.assertRaises(TypeError, nani.validate, nani.String(length=[8]))
 
     def test_unicode_invalid_attributes(self):
-        self.assertRaises(TypeError, nani.resolve, nani.Unicode(length=1.23))
-        self.assertRaises(TypeError, nani.resolve, nani.Unicode(length='abc'))
-        self.assertRaises(TypeError, nani.resolve, nani.Unicode(length=[8]))
+        self.assertRaises(TypeError, nani.validate, nani.Unicode(length=1.23))
+        self.assertRaises(TypeError, nani.validate, nani.Unicode(length='abc'))
+        self.assertRaises(TypeError, nani.validate, nani.Unicode(length=[8]))
 
     def test_array_invalid_attributes(self):
-        self.assertRaises(TypeError, nani.resolve, nani.Array(element_type=None, shape=1))
-        self.assertRaises(ValueError, nani.resolve, nani.Array(element_type=nani.Array(element_type=nani.Number(), shape=0), shape=(1, 2)))
+        self.assertRaises(TypeError, nani.validate, nani.Array(element_type=None, shape=1))
 
     def test_structure_invalid_attributes(self):
-        self.assertRaises(ValueError, nani.resolve, nani.Structure(fields=(('duplicate', nani.Number()), ('duplicate', nani.Bool()))))
+        self.assertRaises(ValueError, nani.validate, nani.Structure(fields=(('duplicate', nani.Number()), ('duplicate', nani.Bool()))))
 
     def test_subtypes(self):
         self.assertIsNotNone(nani.resolve(_subtypes.Bool()))
@@ -329,67 +328,67 @@ class MainTest(unittest.TestCase):
 
     def test_error_messages(self):
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Number)
+            nani.validate(nani.Number)
 
         self.assertEqual(str(c.exception), "The data type is expected to be an instance object, but got the type 'nani.Number' instead.")
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(123)
+            nani.validate(123)
 
         self.assertEqual(str(c.exception), "Objects of type 'int' aren't supported as data types. Use any type from %s instead." % (_join_types(nani._ALL, "or "),))
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Number(type=None))
+            nani.validate(nani.Number(type=None))
 
         self.assertEqual(str(c.exception), "The attribute 'Number.type' cannot be 'None'.")
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Number(type=123))
+            nani.validate(nani.Number(type=123))
 
         self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a type object.")
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Array(element_type=nani.Number(), shape=0, view=123))
+            nani.validate(nani.Array(element_type=nani.Number(), shape=0, view=123))
 
         self.assertEqual(str(c.exception), "The attribute 'Array.view' is expected to be a type object or 'None'.")
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Array(element_type=123, shape=0))
+            nani.validate(nani.Array(element_type=123, shape=0))
 
         self.assertEqual(str(c.exception), "The attribute 'Array.element_type' is expected to be an instance object of type %s, not 'int'." % (_join_types(nani._ALL, "or "),))
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Number(type=str))
+            nani.validate(nani.Number(type=str))
 
         self.assertEqual(str(c.exception), "The attribute 'Number.type' is expected to be a subclass of %s, but got 'str' instead." % (_join_types(nani._NUMBER_TYPES, "or "),))
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Structure(fields=('abc', 123), name='Something'))
+            nani.validate(nani.Structure(fields=('abc', 123), name='Something'))
 
         self.assertEqual(str(c.exception), "Each field from the attribute 'Something.fields' is expected to be an instance object of type 'list', 'tuple', or 'nani.Field', not 'str'.")
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Structure(fields=(('abc',),), name='Whatever'))
+            nani.validate(nani.Structure(fields=(('abc',),), name='Whatever'))
 
         self.assertEqual(str(c.exception), "Each field from the attribute 'Whatever.fields' is expected to be an instance object of type 'list', 'tuple', or 'nani.Field', and compatible with the 'nani.Field' structure, but got ('abc',) instead.")
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Structure(fields=((1, nani.Number()),), name='Moon'))
+            nani.validate(nani.Structure(fields=((1, nani.Number()),), name='Moon'))
 
         self.assertEqual(str(c.exception), "The first element of each field from the attribute 'Moon.fields', that is the 'name' attribute, is expected to be an instance object of type %s, not 'int'." % (_join_types(_STRING_TYPES, "or "),))
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Structure(fields=(('id', nani.Number),), name='Star'))
+            nani.validate(nani.Structure(fields=(('id', nani.Number),), name='Star'))
 
         self.assertEqual(str(c.exception), "The second element of each field from the attribute 'Star.fields', that is the 'type' attribute, is expected to be an instance object of type %s, not 'type'." % (_join_types(nani._ALL, "or "),))
 
         with self.assertRaises(TypeError) as c:
-            nani.resolve(nani.Structure(fields=(('id', nani.Number(), 1.23),)))
+            nani.validate(nani.Structure(fields=(('id', nani.Number(), 1.23),)))
 
         self.assertEqual(str(c.exception), "The third element of each field from the attribute 'Structure.fields', that is the 'read_only' attribute, is expected to be an instance object of type 'bool', not 'float'.")
 
         with self.assertRaises(ValueError) as c:
-            nani.resolve(nani.Structure(fields=(('id', nani.Number()), ('id', nani.Number()), ('duplicate', nani.Bool()), ('duplicate', nani.Number()))))
+            nani.validate(nani.Structure(fields=(('id', nani.Number()), ('id', nani.Number()), ('duplicate', nani.Bool()), ('duplicate', nani.Number()))))
 
         self.assertEqual(str(c.exception), "The structure fields 'id', and 'duplicate', were provided multiple times.")
 
