@@ -382,7 +382,7 @@ class _DirectArrayViewMixin(object):
     def __init__(self, data):
         self._data = data
 
-    def __str__(self):
+    def __repr__(self):
         return "[%s]" % (', '.join(str(item) for item in self._data))
 
     def __getitem__(self, index):
@@ -404,7 +404,7 @@ class _DirectArrayViewMixin(object):
 _MIXIN_ATTRIBUTES[_DirectArrayViewMixin] = (
     '__slots__',
     '__init__',
-    '__str__',
+    '__repr__',
     '__getitem__',
     '__setitem__',
     '__iter__',
@@ -426,7 +426,7 @@ class _IndirectAtomicArrayViewMixin(object):
     def __init__(self, data):
         self._data = data
 
-    def __str__(self):
+    def __repr__(self):
         return "[%s]" % (', '.join(str(self._element_view(self._data, i))
                                    for i in _range(len(self._data))))
 
@@ -450,7 +450,7 @@ class _IndirectAtomicArrayViewMixin(object):
 _MIXIN_ATTRIBUTES[_IndirectAtomicArrayViewMixin] = (
     '__slots__',
     '__init__',
-    '__str__',
+    '__repr__',
     '__getitem__',
     '__setitem__',
     '__iter__',
@@ -476,7 +476,7 @@ class _IndirectCompositeArrayViewMixin(object):
     def __init__(self, data):
         self._data = data
 
-    def __str__(self):
+    def __repr__(self):
         return "[%s]" % (', '.join(str(self._element_view(item))
                                    for item in self._data))
 
@@ -499,7 +499,7 @@ class _IndirectCompositeArrayViewMixin(object):
 _MIXIN_ATTRIBUTES[_IndirectCompositeArrayViewMixin] = (
     '__slots__',
     '__init__',
-    '__str__',
+    '__repr__',
     '__getitem__',
     '__setitem__',
     '__iter__',
@@ -519,8 +519,8 @@ class _StructuredViewMixin(object):
     def __init__(self, data):
         self._data = data
 
-    def __str__(self):
-        fields_and_values = ("%s=%s" % (field, getattr(self, field))
+    def __repr__(self):
+        fields_and_values = ("%s=%r" % (field, getattr(self, field))
                              for field in self._fields)
         return "%s(%s)" % (type(self).__name__, ', '.join(fields_and_values))
 
@@ -528,7 +528,7 @@ class _StructuredViewMixin(object):
 _MIXIN_ATTRIBUTES[_StructuredViewMixin] = (
     '__slots__',
     '__init__',
-    '__str__',
+    '__repr__',
 )
 
 
