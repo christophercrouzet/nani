@@ -632,6 +632,8 @@ def resolve(data_type, name=None, listify_default=False):
     Nani's data types into properties that can be used to define a new NumPy
     array and to wrap it into a view object.
 
+    Use :func:`validate` to check if the input data type is well-formed.
+
     Parameters
     ----------
     data_type : nani data type
