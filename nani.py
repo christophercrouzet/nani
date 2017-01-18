@@ -789,13 +789,6 @@ def _validate(data_type, parent_path):
     TypeError or ValueError
         The data type isn't well-formed.
     """
-    def find_duplicate_fields(fields):
-        field_names = [field[_FIELD_NAME] for field in fields]
-        seen = set()
-        return [item for item in field_names
-                if field_names.count(item) > 1
-                and item not in seen and seen.add(item) is None]
-
     if isinstance(data_type, _CLASS_TYPES):
         raise TypeError(
             "The data type is expected to be an instance object, but got the "
@@ -902,7 +895,8 @@ def _validate(data_type, parent_path):
             field_path = '%s.%s' % (full_path, field.name)
             _validate(field.type, field_path)
 
-        duplicates = find_duplicate_fields(data_type.fields)
+        fields = [field[_FIELD_NAME] for field in data_type.fields]
+        duplicates = _find_duplicates(fields)
         if duplicates:
             if len(duplicates) > 1:
                 raise ValueError(
@@ -1208,6 +1202,25 @@ def _find_base_type(data_type):
             return base
 
     return None
+
+
+def _find_duplicates(seq):
+    """Find the duplicate elements from a sequence.
+
+    Parameters
+    ----------
+    seq : sequence
+        Sequence of elements.
+
+    Returns
+    -------
+    list
+        The duplicate elements, if any.
+    """
+    seen = set()
+    return [element for element in seq
+            if seq.count(element) > 1
+            and element not in seen and seen.add(element) is None]
 
 
 def _format_type(cls):
