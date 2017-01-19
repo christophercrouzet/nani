@@ -117,7 +117,10 @@ class Number(_Number):
 
     Attributes
     ----------
-    default : numpy.number type
+    type : type
+        Type of the number. Either one inheriting from ``numbers.Number`` or
+        ``numpy.number``.
+    default : numbers.Number or numpy.number
         Default value.
     view : type or None
         If ``None``, the owning array returns a direct reference to this
