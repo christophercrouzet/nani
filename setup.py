@@ -51,7 +51,8 @@ setuptools.setup(
     ],
     install_requires=['numpy'],
     extras_require={
-        'dev': ['coverage', 'sphinx>=1.3', 'tox'],
+        'dev': ['coverage', 'pycodestyle', 'pydocstyle', 'pylint',
+                'sphinx>=1.3', 'tox'],
         'docs': ['sphinx>=1.3'],
     },
     packages=[],

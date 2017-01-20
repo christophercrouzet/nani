@@ -4,14 +4,10 @@
 #   |__|__|___._|__|__|__|
 #
 
-"""
-    nani
-    ~~~~
+"""Alternative approach to defining and viewing NumPy's arrays.
 
-    Alternative approach to defining and viewing NumPy's arrays.
-
-    :copyright: Copyright 2016-2017 by Christopher Crouzet.
-    :license: MIT, see LICENSE for details.
+:copyright: Copyright 2016-2017 by Christopher Crouzet.
+:license: MIT, see LICENSE for details.
 """
 
 import collections
@@ -59,7 +55,6 @@ _Bool.__new__.__defaults__ = (False, None)
 
 
 class Bool(_Bool):
-
     """Type corresponding to ``numpy.bool_``.
 
     Attributes
@@ -85,7 +80,6 @@ _Object.__new__.__defaults__ = (None, None)
 
 
 class Object(_Object):
-
     """Type corresponding to ``numpy.object_``.
 
     Attributes
@@ -112,7 +106,6 @@ _Number.__new__.__defaults__ = (numpy.float_, 0, None)
 
 
 class Number(_Number):
-
     """Type corresponding to ``numpy.number``.
 
     Attributes
@@ -142,7 +135,6 @@ _String.__new__.__defaults__ = (_BuiltinString(), None)
 
 
 class String(_String):
-
     """Type corresponding to ``numpy.string_``.
 
     Attributes
@@ -171,7 +163,6 @@ _Unicode.__new__.__defaults__ = (_BuiltinUnicode(), None)
 
 
 class Unicode(_Unicode):
-
     """Type corresponding to ``numpy.unicode_``.
 
     Attributes
@@ -201,7 +192,6 @@ _Array.__new__.__defaults__ = (None, None)
 
 
 class Array(_Array):
-
     """Type corresponding to a NumPy (sub)array.
 
     Attributes
@@ -231,7 +221,6 @@ _Structure.__new__.__defaults__ = (None, None)
 
 
 class Structure(_Structure):
-
     """Type corresponding to a NumPy structured array.
 
     Attributes
@@ -284,7 +273,6 @@ _Field.__new__.__defaults__ = (False,)
 
 
 class Field(_Field):
-
     """Describe a field of a structured array.
 
     Attributes
@@ -373,7 +361,6 @@ _MIXIN_ATTRIBUTES = {}
 
 
 class _DirectArrayViewMixin(object):
-
     """Mixin for array views with no element view provided.
 
     Element are directly accessed and set.
@@ -428,7 +415,6 @@ _MIXIN_ATTRIBUTES[_DirectArrayViewMixin] = (
 
 
 class _IndirectAtomicArrayViewMixin(object):
-
     """Mixin for atomic array views with an element view provided.
 
     Atomic elements are not directly accessed and set. Instead they are first
@@ -486,7 +472,6 @@ _MIXIN_ATTRIBUTES[_IndirectAtomicArrayViewMixin] = (
 
 
 class _IndirectCompositeArrayViewMixin(object):
-
     """Mixin for composite array views with an element view provided.
 
     Composite elements are first wrapped into the element view type then
@@ -547,11 +532,11 @@ _MIXIN_ATTRIBUTES[_IndirectCompositeArrayViewMixin] = (
 
 
 class _StructuredViewMixin(object):
-
     """Mixin for structured array views.
 
     Properties are to be dynamically generated for each field.
     """
+
     __slots__ = ('_data',)
 
     def __init__(self, data):
@@ -591,7 +576,6 @@ _Nani = collections.namedtuple(
 
 
 class Nani(_Nani):
-
     """Output structure of the function `resolve`.
 
     Attributes
@@ -937,7 +921,7 @@ def _consolidate(data_type):
     elif isinstance(data_type, Structure):
         fields = tuple(
             Field(*(_consolidate(field[i]) if i == _FIELD_TYPE else field[i]
-                  for i in _range(len(field))))
+                    for i in _range(len(field))))
             for field in data_type.fields)
         out = data_type._replace(fields=fields)
 
