@@ -20,6 +20,9 @@ import numpy
 
 
 __version__ = '0.2.0'
+__all__ = ['Bool', 'Object', 'Number', 'String', 'Unicode', 'Array',
+           'Structure', 'Bytes', 'Str', 'Field', 'READ_ONLY', 'Nani',
+           'validate', 'resolve', 'update', 'get_data', 'get_element_view']
 
 
 _PY2 = sys.version_info[0] == 2
