@@ -25,10 +25,11 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 
-project = u'nani'
-copyright = u"2016-%i, Christopher Crouzet" % (datetime.utcnow().year,)
-author = u"Christopher Crouzet"
+project = nani.__title__
 version = nani.__version__
+description = nani.__summary__
+author = nani.__author__
+copyright = "2016-%i, %s" % (datetime.utcnow().year, nani.__author__)
 release = version
 language = None
 
@@ -39,11 +40,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
 show_authors = False
 todo_include_todos = False
-
-description = (
-    "A Python library that provides an alternative approach to defining and "
-    "viewing NumPy's arrays."
-)
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -68,14 +64,14 @@ html_sidebars = {
         'links.html',
         'searchbox.html',
         'donate.html',
-    ]
+    ],
 }
 html_static_path = ['_static']
 
 
 # -- Options for HTMLHelp output ------------------------------------------
 
-htmlhelp_basename = 'nanidoc'
+htmlhelp_basename = '%sdoc' % (project,)
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -84,20 +80,21 @@ latex_elements = {
 }
 
 latex_documents = [
-    (master_doc, 'nani.tex', u"nani Documentation", author, 'manual'),
+    (master_doc, '%s.tex' % (project,), "%s Documentation" % (project,),
+     author, 'manual'),
 ]
 
 
 # -- Options for manual page output ---------------------------------------
 
 man_pages = [
-    (master_doc, 'nani', u"nani Documentation", [author], 1)
+    (master_doc, project, "%s Documentation" % (project,), [author], 1),
 ]
 
 
 # -- Options for Texinfo output -------------------------------------------
 
 texinfo_documents = [
-    (master_doc, 'nani', u"nani Documentation", author, 'nani',
+    (master_doc, project, "%s Documentation" % (project,), author, project,
      description, 'Miscellaneous'),
 ]

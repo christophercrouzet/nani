@@ -4,11 +4,19 @@
 #   |__|__|___._|__|__|__|
 #
 
-"""Alternative approach to defining and viewing NumPy's arrays.
+"""Alternative approach to defining and viewing NumPy's arrays."""
 
-:copyright: Copyright 2016-2017 by Christopher Crouzet.
-:license: MIT, see LICENSE for details.
-"""
+__all__ = ['Bool', 'Object', 'Number', 'String', 'Unicode', 'Array',
+           'Structure', 'Bytes', 'Str', 'Field', 'READ_ONLY', 'Nani',
+           'validate', 'resolve', 'update', 'get_data', 'get_element_view']
+
+__title__ = 'nani'
+__version__ = '0.2.0'
+__summary__ = "Alternative approach to defining and viewing NumPy's arrays"
+__url__ = 'https://github.com/christophercrouzet/nani'
+__author__ = "Christopher Crouzet"
+__contact__ = 'christopher.crouzet@gmail.com'
+__license__ = "MIT"
 
 import collections
 import copy
@@ -17,12 +25,6 @@ import sys
 import types
 
 import numpy
-
-
-__version__ = '0.2.0'
-__all__ = ['Bool', 'Object', 'Number', 'String', 'Unicode', 'Array',
-           'Structure', 'Bytes', 'Str', 'Field', 'READ_ONLY', 'Nani',
-           'validate', 'resolve', 'update', 'get_data', 'get_element_view']
 
 
 _PY2 = sys.version_info[0] == 2
