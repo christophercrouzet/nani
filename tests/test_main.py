@@ -2,24 +2,21 @@
 
 import os
 import sys
-_HERE = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(0, os.path.abspath(os.path.join(_HERE, os.pardir)))
-
-
-import sys
 import unittest
-
 from distutils.version import StrictVersion
 
 import numpy
 
+_HERE = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(_HERE, os.pardir)))
+
 import nani
 
-from tests.data import flag as _flag
-from tests.data import numbers as _numbers
-from tests.data import particle as _particle
-from tests.data import subtypes as _subtypes
-from tests.data import vector2 as _vector2
+import tests.data.flag as _flag
+import tests.data.numbers as _numbers
+import tests.data.particle as _particle
+import tests.data.subtypes as _subtypes
+import tests.data.vector2 as _vector2
 
 
 _PY2 = sys.version_info[0] == 2
