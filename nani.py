@@ -298,8 +298,8 @@ class Field(_Field):
 READ_ONLY = True
 
 
-_FIELD_NAME = Field._fields.index('name')
-_FIELD_TYPE = Field._fields.index('type')
+_FIELD_NAME_IDX = Field._fields.index('name')
+_FIELD_TYPE_IDX = Field._fields.index('type')
 _FIELD_ATTR_COUNT = len(Field._fields)
 _FIELD_REQUIRED_ARG_RANGE = _range(
     _FIELD_ATTR_COUNT - len(Field.__new__.__defaults__),
@@ -885,7 +885,7 @@ def _validate(data_type, parent_path):
             field_path = '%s.%s' % (full_path, field.name)
             _validate(field.type, field_path)
 
-        fields = [field[_FIELD_NAME] for field in data_type.fields]
+        fields = [field[_FIELD_NAME_IDX] for field in data_type.fields]
         duplicates = _find_duplicates(fields)
         if duplicates:
             if len(duplicates) > 1:
@@ -923,7 +923,8 @@ def _consolidate(data_type):
         out = data_type._replace(element_type=element_type)
     elif isinstance(data_type, Structure):
         fields = tuple(
-            Field(*(_consolidate(field[i]) if i == _FIELD_TYPE else field[i]
+            Field(*(_consolidate(field[i]) if i == _FIELD_TYPE_IDX
+                    else field[i]
                     for i in _range(len(field))))
             for field in data_type.fields)
         out = data_type._replace(fields=fields)
