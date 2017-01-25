@@ -9,7 +9,7 @@ Structured arrays are described as a sequence of fields. Each field can be
 defined as a :class:`Field` or as a tuple compatible with the :class:`Field`
 structure.
 
-A constant :data:`READ_ONLY` equivalent to the boolean value ``True`` is
+A constant :const:`READ_ONLY` equivalent to the boolean value ``True`` is
 provided to make the code more readable when setting the
 :attr:`Field.read_only` attribute without explicitely writing the ``read_only``
 keyword. Example:
