@@ -763,23 +763,7 @@ def get_element_view(view):
 
 
 def _validate(data_type, parent_path):
-    """Implementation for :func:`validate`.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-    parent_path : str
-        Parent path in the form of a dotted path.
-
-    bool
-        ``True`` if the data type is well-formed.
-
-    Raises
-    ------
-    TypeError or ValueError
-        The data type isn't well-formed.
-    """
+    """Implementation for the `validate` function."""
     if isinstance(data_type, _CLASS_TYPES):
         raise TypeError(
             "The data type is expected to be an instance object, but got the "
@@ -905,17 +889,7 @@ def _consolidate(data_type):
     """Enforce the structure of the data type.
 
     Specifically, ensure that if a field is defined as a generic tuple, then it
-    will be converted into an instance of :class:`Field`.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-
-    Returns
-    -------
-    nani data type
-        The consolidated data type.
+    will be converted into an instance of `Field`.
     """
     if isinstance(data_type, _ATOMIC):
         out = data_type
@@ -934,18 +908,7 @@ def _consolidate(data_type):
 
 
 def _resolve_dtype(data_type):
-    """Retrieve the corresponding NumPy's ``dtype`` for a given data type.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-
-    Returns
-    -------
-    numpy.dtype
-        The corresponding NumPy's ``dtype``.
-    """
+    """Retrieve the corresponding NumPy's `dtype` for a given data type."""
     if isinstance(data_type, _FIXED_ATOMIC):
         out = _get_atomic_dtype(data_type)
     elif isinstance(data_type, _FLEXIBLE_ATOMIC):
@@ -967,21 +930,7 @@ def _resolve_dtype(data_type):
 
 
 def _resolve_default(data_type, listify=False):
-    """Retrieve the default value for a given data type.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-    listify : bool
-        ``True`` to output lists in place of tuples. This might cause the
-        output to be incompatible with ``numpy.array``.
-
-    Returns
-    -------
-    object
-        The default value.
-    """
+    """Retrieve the default value for a given data type."""
     if isinstance(data_type, _ATOMIC):
         # A Python's object type needs to be left as is instead of being
         # wrapped into a NumPy type.
@@ -1015,23 +964,13 @@ def _resolve_default(data_type, listify=False):
 def _resolve_view(data_type):
     """Retrieve the view for a given data type.
 
-    Only one view class will be returned, that is the one representing the root
-    data type, but more class objects might be dynamically defined if the input
-    data type has nested elements, such as for the :class:`Array` and
-    :class:`Structure` types.
+    Only one view class is returned, that is the one representing the root data
+    type, but more class objects might be dynamically created if the input
+    data type has nested elements, such as for the `Array` and `Structure`
+    types.
 
     The default behaviour of dynamically and recursively creating a new view
-    class can be overriden by setting the ``view`` attribute of a data type.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-
-    Returns
-    -------
-    object
-        The view.
+    class can be overriden by setting the `view` attribute of a data type.
     """
     view = getattr(data_type, 'view', None)
     if view is not None:
@@ -1048,18 +987,7 @@ def _resolve_view(data_type):
 
 
 def _define_array_view(data_type):
-    """Define a new view object for a :class:`Array` type.
-
-    Parameters
-    ----------
-    data_type : nani.Array
-        Data type.
-
-    Returns
-    -------
-    object
-        The new array view.
-    """
+    """Define a new view object for a `Array` type."""
     element_type = data_type.element_type
     element_view = _resolve_view(element_type)
     if element_view is None:
@@ -1083,18 +1011,7 @@ def _define_array_view(data_type):
 
 
 def _define_structure_view(data_type):
-    """Define a new view object for a :class:`Structure` type.
-
-    Parameters
-    ----------
-    data_type : nani.Structure
-        Data type.
-
-    Returns
-    -------
-    object
-        The new structure view.
-    """
+    """Define a new view object for a `Structure` type."""
     def define_getter(field_index, field_type, field_view):
         if field_view is None:
             def getter(self):
@@ -1136,16 +1053,6 @@ def _get_mixin_attributes(mixins):
 
     The attributes of each mixin class are being merged into a single
     dictionary.
-
-    Parameters
-    ----------
-    mixins : iterable
-        Mixin classes.
-
-    Returns
-    -------
-    dict
-        A dictionary of attribute's `name: value` pairs.
     """
     return {attribute: mixin.__dict__[attribute]
             for mixin in mixins
@@ -1153,18 +1060,7 @@ def _get_mixin_attributes(mixins):
 
 
 def _get_atomic_dtype(data_type):
-    """Retrieve the NumPy's ``dtype`` for a given atomic data type.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-
-    Returns
-    -------
-    numpy.dtype
-        The corresponding NumPy's ``dtype``.
-    """
+    """Retrieve the NumPy's `dtype` for a given atomic data type."""
     atomic_type = getattr(data_type, 'type', None)
     if atomic_type is not None:
         return atomic_type
@@ -1177,16 +1073,6 @@ def _find_base_type(data_type):
 
     This is useful when Nani's data types were subclassed and the original type
     is required.
-
-    Parameters
-    ----------
-    data_type : nani data type
-        Data type.
-
-    Returns
-    -------
-    object
-        The Nani's base type.
     """
     bases = type(data_type).__mro__
     for base in bases:
@@ -1197,18 +1083,7 @@ def _find_base_type(data_type):
 
 
 def _find_duplicates(seq):
-    """Find the duplicate elements from a sequence.
-
-    Parameters
-    ----------
-    seq : sequence
-        Sequence of elements.
-
-    Returns
-    -------
-    list
-        The duplicate elements, if any.
-    """
+    """Find the duplicate elements from a sequence."""
     seen = set()
     return [element for element in seq
             if seq.count(element) > 1
@@ -1216,18 +1091,7 @@ def _find_duplicates(seq):
 
 
 def _format_type(cls):
-    """Format a type name for printing.
-
-    Parameters
-    ----------
-    cls : type
-        Class object.
-
-    Returns
-    -------
-    str
-        The formatted class object name.
-    """
+    """Format a type name for printing."""
     if cls.__module__ == _BUILTIN_MODULE:
         return cls.__name__
     else:
@@ -1239,23 +1103,6 @@ def _format_element(element, count, index, last_separator):
 
     This only prepends a separator for the last element and wraps each element
     with single quotes.
-
-    Parameters
-    ----------
-    element : object
-        Current element.
-    count : int
-        Total number of items in the sequence.
-    index : int
-        Current index.
-    last_separator : str
-        Separator to be used for joining the last element when multiple
-        elements are to be joined.
-
-    Returns
-    -------
-    str
-        The joined object string representations.
     """
     return ("%s'%s'" % (last_separator, element)
             if count > 1 and index == count - 1
@@ -1263,41 +1110,13 @@ def _format_element(element, count, index, last_separator):
 
 
 def _join_sequence(seq, last_separator=''):
-    """Join a sequence into a string.
-
-    Parameters
-    ----------
-    seq : sequence
-        Object string representations to be joined.
-    last_separator : str
-        Separator to be used for joining the last element when multiple
-        elements are to be joined.
-
-    Returns
-    -------
-    str
-        The joined object string representations.
-    """
+    """Join a sequence into a string."""
     count = len(seq)
     return ', '.join(_format_element(element, count, i, last_separator)
                      for i, element in enumerate(seq))
 
 
 def _join_types(seq, last_separator=''):
-    """Join class object names into a string.
-
-    Parameters
-    ----------
-    seq : sequence
-        Class objects whose names are to be joined.
-    last_separator : str
-        Separator to be used for joining the last element when multiple types
-        are to be joined.
-
-    Returns
-    -------
-    str
-        The joined class object names.
-    """
+    """Join class object names into a string."""
     class_names = [_format_type(cls) for cls in seq]
     return _join_sequence(class_names, last_separator)
