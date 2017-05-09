@@ -5,7 +5,7 @@ Installation
 
 Nani is written in the Python language and hence requires a Python interpreter.
 Any of the following Python versions is supported: 2.7, 3.3, 3.4, 3.5, and 3.6.
-On top of that, Nani also depends the |numpy|_ package.
+On top of that, Nani also depends on the |numpy|_ package.
 
 .. note::
 
