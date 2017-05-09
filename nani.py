@@ -482,9 +482,8 @@ class _IndirectCompositeArrayViewMixin(object):
     Composite elements are first wrapped into the element view type then
     returned.
 
-    The element views are to be initialized with a single parameter:
-
-        - data: a view to the NumPy array representing the element.
+    The element views are to be initialized with 1 parameter: ``data``, the
+    NumPy array representing the element.
     """
 
     __slots__ = ('_data',)
