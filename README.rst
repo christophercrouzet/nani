@@ -89,6 +89,14 @@ Read the documentation online at `nani.readthedocs.io`_ or check its source in
 the ``doc`` directory.
 
 
+Out There
+---------
+
+Projects using Nani include:
+
+* `hienoi <https://github.com/christophercrouzet/hienoi>`_
+
+
 Author
 ------
 
